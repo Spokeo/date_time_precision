@@ -14,4 +14,10 @@ Gem::Specification.new do |gem|
   gem.name          = "date_time_precision"
   gem.require_paths = ["lib"]
   gem.version       = DateTimePrecision::VERSION
+  
+  gem.add_development_dependency 'rake', '>= 0.9.2'
+  gem.add_development_dependency 'rspec', '~> 2.10.0'
+  gem.add_development_dependency 'activesupport'
+  gem.add_development_dependency 'ruby-debug'
+  #gem.add_development_dependency 'ruby-debug19'
 end
