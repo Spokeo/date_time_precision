@@ -2,7 +2,6 @@ require 'spec_helper'
 require 'date_time_precision'
 
 describe DateTimePrecision, 'Constructors' do
-
   it 'has no precision for unspecified date' do
     d = Date.new
     d.precision.should == DateTimePrecision::NONE
@@ -58,7 +57,6 @@ describe DateTimePrecision, 'Constructors' do
       t.precision.should == t.class::MAX_PRECISION
     end
   end
-
 end
 
 describe DateTimePrecision, 'Parsing' do

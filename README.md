@@ -42,11 +42,18 @@ Tested in Ruby 1.8.7, 1.9.1, and 1.9.2
 ## Usage
 
     require 'date_time_precision'
+    
     d = Date.new(2000)
     d.precision # => DateTimePrecision::YEAR
+    
     t = Time::parse("2001-05")
     t.precision # => DateTimePrecision::MONTH
     t.precision > d.precision # => true
+
+## Wishlist
+
+*   Support Time::mktime, Time::utc, Time::local
+*   Support easy string formatting based on precision
 
 ## Contributing
 
