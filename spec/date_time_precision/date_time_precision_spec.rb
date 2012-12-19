@@ -60,7 +60,7 @@ describe DateTimePrecision, 'Constructors' do
 end
 
 describe DateTimePrecision, 'Parsing' do
-  it 'should have second precision when parsing a timestamp' do
+  it 'should have second/frac precision when parsing a timestamp' do
     t = Time::parse('2000-2-3 00:00:00 UTC')
     t.precision.should == DateTimePrecision::SEC
     t.year.should == 2000

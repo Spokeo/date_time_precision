@@ -107,6 +107,11 @@ module DateTimePrecision
       min_precision = [frags1.length,frags2.length].min
       frags1.slice(0,min_precision) == frags2.slice(0,min_precision)
     end
+    
+    def precision(val)
+      val = val.take(self::MAX_PRECISION) if val.is_a? Array
+      DateTimePrecision::precision(val)
+    end
   end
 
   def self.included(base)
