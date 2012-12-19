@@ -13,7 +13,22 @@ Date.new(2000).to_s   => "2000-01-01"
 There is no way to tell the difference between January 1, 2000 and a Date where only the year 2000 was known.
 
 The DateTimePrecision gem patches the Date, Time, DateTime, and NilClass classes to keep track of precision.
-The behavior of these classes should remain unchanged, and the following methods are now available:
+The behavior of these classes should otherwise remain unchanged.
+
+## Usage
+
+```ruby
+require 'date_time_precision'
+
+d = Date.new(2000)
+d.precision # => DateTimePrecision::YEAR
+
+t = Time::parse("2001-05")
+t.precision # => DateTimePrecision::MONTH
+t.precision > d.precision # => true
+```
+
+The gem adds the following instance methods to Date, Time, and/or DateTime:
 
 *    precision
 *    precision=
@@ -46,19 +61,6 @@ And then execute:
 Or install it yourself as:
 
     $ gem install date_time_precision
- 
-## Usage
-
-```ruby
-require 'date_time_precision'
-
-d = Date.new(2000)
-d.precision # => DateTimePrecision::YEAR
-
-t = Time::parse("2001-05")
-t.precision # => DateTimePrecision::MONTH
-t.precision > d.precision # => true
-```
 
 ## Wishlist
 
