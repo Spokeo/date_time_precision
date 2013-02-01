@@ -1,5 +1,12 @@
 require 'spec_helper'
 require 'active_support'
+
+require 'active_support/core_ext/date/conversions'
+require 'active_support/core_ext/time/conversions'
+begin
+  require 'active_support/core_ext/datetime/conversions'
+rescue LoadError; end
+
 require 'date_time_precision'
 
 describe DateTimePrecision, 'Conversions' do  

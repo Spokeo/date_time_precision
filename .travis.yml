@@ -8,3 +8,16 @@ rvm:
   #- 2.0.0
   - jruby-18mode
   - jruby-19mode
+gemfile:
+  - gemfiles/activesupport2.gemfile
+  - gemfiles/activesupport3.gemfile
+matrix:
+  exclude:
+    - rvm: 1.9.2
+      gemfile: gemfiles/activesupport2.gemfile
+    - rvm: 1.9.3
+      gemfile: gemfiles/activesupport2.gemfile
+    - rvm: jruby-19mode
+      gemfile: gemfiles/activesupport2.gemfile
+    - rvm: rbx-19mode
+      gemfile: gemfiles/activesupport2.gemfile
