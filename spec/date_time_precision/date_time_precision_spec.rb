@@ -200,6 +200,20 @@ describe DateTimePrecision do
       it 'should convert a hash to a Time' do
         time_hash.to_time.should == time_val
       end
+      
+      it 'should accept flexible keys' do
+        {
+          :y => 1989,
+          :m => 3,
+          :d => 11
+        }.to_date.should == date_val
+        
+        {
+          :year => 1989,
+          :month => 3,
+          :day => 11
+        }.to_date.should == date_val
+      end
     end
   end
 end
