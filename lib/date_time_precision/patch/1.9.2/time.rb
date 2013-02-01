@@ -4,7 +4,7 @@ require 'time'
 class Time
   include DateTimePrecision
   
-  MAX_PRECISION = DateTimePrecision::SEC
+  MAX_PRECISION = DateTimePrecision::FRAC
 
   def self.parse(date, now=self.now)
     d = Date._parse(date, false)

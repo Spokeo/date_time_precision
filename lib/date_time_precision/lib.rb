@@ -11,6 +11,16 @@ module DateTimePrecision
   
     # Default values for y,m,d,h,m,s,frac
     NEW_DEFAULTS = [-4712,1,1,0,0,0,0]
+    
+    DATE_ATTRIBUTES = {
+      :year => YEAR,
+      :mon => MONTH,
+      :mday => DAY,
+      :hour => HOUR,
+      :min => MIN,
+      :sec => SEC,
+      :sec_frac => FRAC
+    }
   end
 
   # Returns the precision for this Date/Time object, or the
@@ -30,7 +40,7 @@ module DateTimePrecision
       val.precision
     when Hash
       case
-      when val[:sec_frac]
+      when val[:sec_frac], val[:subsec]
         FRAC
       when val[:sec]
         SEC
@@ -38,9 +48,9 @@ module DateTimePrecision
         MIN
       when val[:hour]
         HOUR
-      when val[:mday]
+      when val[:mday], val[:day]
         DAY
-      when val[:mon]
+      when val[:mon], val[:month]
         MONTH
       when val[:year]
         YEAR
@@ -54,33 +64,11 @@ module DateTimePrecision
     end
   end
 
-  def subsec?
-    return self.precision >= FRAC
-  end
-
-  def sec?
-    return self.precision >= SEC
-  end
-
-  def min?
-    return self.precision >= MIN
-  end
-
-  def hour?
-    return self.precision >= HOUR
-  end
-  
-  def year?
-    return self.precision >= YEAR
-  end
-
-  def month?
-    return self.precision >= MONTH
-  end
-  alias_method :mon?, :month?
-
-  def day?
-    return self.precision >= DAY
+  # Define attribute query methods
+  DATE_ATTRIBUTES.each do |attribute_name, precision|
+    define_method "#{attribute_name}?" do
+      return self.precision >= precision
+    end
   end
   
   def fragments
@@ -92,6 +80,10 @@ module DateTimePrecision
     frags << self.min if self.min?
     frags << self.sec if self.sec?
     frags
+  end
+  
+  def to_h
+    Hash[DATE_ATTRIBUTES.keys.map {|attribute| [attribute, self.send(attribute)] if self.send("#{attribute}?") }.compact]
   end
   
   # Returns true if dates partially match (i.e. one is a partial date of the other)
@@ -132,5 +124,21 @@ module DateTimePrecision
     
     # Extend with this module's class methods
     base.extend(ClassMethods)
+    
+    base.instance_eval do
+      if method_defined?(:usec)
+        alias_method :usec?, :sec_frac?
+        alias_method :sec_frac, :usec
+      end
+      
+      if method_defined?(:subsec)
+        alias_method :subsec?, :sec_frac?
+      end
+
+      alias_method :month?, :mon?
+
+      alias_method :mday, :day
+      alias_method :day?, :mday?
+    end
   end
 end
