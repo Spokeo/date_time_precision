@@ -1,4 +1,15 @@
 require 'date_time_precision/lib'
 
 require 'date_time_precision/patch/nil'
-Dir["#{File.dirname(__FILE__)}/patch/#{RUBY_VERSION}/*.rb"].each {|f| require f }
+
+DateTimePrecision::PATCH_VERSION = begin
+  if defined?(JRUBY_VERSION) || (defined?(RUBY_ENGINE) and RUBY_ENGINE == 'rbx')
+    #JRuby and Rubinius implement the Date/Time classes in pure Ruby, so they can use the 1.9.2 patch
+    RUBY_VERSION >= '1.9' ? '1.9.2' : '1.8.7'
+  else
+    RUBY_VERSION
+  end
+end
+      
+
+Dir["#{File.dirname(__FILE__)}/patch/#{DateTimePrecision::PATCH_VERSION}/*.rb"].each {|f| require f }
