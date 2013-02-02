@@ -58,6 +58,13 @@ describe DateTimePrecision do
         t.precision.should == t.class::MAX_PRECISION
       end
     end
+    
+    it 'should accept nil values in the constructor' do
+      Date.new(nil).precision.should == DateTimePrecision::NONE
+      Date.new(2000, nil).precision.should == DateTimePrecision::YEAR
+      DateTime.new(2000, 1, nil).precision.should == DateTimePrecision::MONTH
+      Time.mktime(2000, 1, 1, nil, nil).precision.should == DateTimePrecision::DAY
+    end
   end
 
   context 'Parsing' do

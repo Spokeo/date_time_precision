@@ -91,6 +91,11 @@ module DateTimePrecision
     self.class::partial_match?(self, date2)
   end
   
+  def normalize_new_args(args)
+    self.class.normalize_new_args(args)
+  end
+  protected :normalize_new_args
+  
   module ClassMethods
     def partial_match?(date1, date2)
       return true if date1.nil? or date2.nil?
@@ -103,6 +108,14 @@ module DateTimePrecision
     def precision(val)
       val = val.take(self::MAX_PRECISION) if val.is_a? Array
       DateTimePrecision::precision(val)
+    end
+    
+    def normalize_new_args(args)
+      unless args.all?
+        args = args.compact
+        args = args.concat(DateTimePrecision::NEW_DEFAULTS.slice(args.length, DateTimePrecision::NEW_DEFAULTS.length - args.length))
+      end
+      args.take(self::MAX_PRECISION)
     end
   end
 

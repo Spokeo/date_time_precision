@@ -7,10 +7,25 @@ class Time
   MAX_PRECISION = DateTimePrecision::FRAC
 
   class << self
+    alias_method :mktime_orig, :mktime
+    def mktime(*args)
+      time_args = args.shift(Time::MAX_PRECISION)
+      precision = self.precision(time_args)
+      time_args = normalize_new_args(time_args)
+      
+      t = mktime_orig(*[time_args, args].flatten)
+      t.precision = precision
+      t
+    end
+    
     alias_method :make_time_orig, :make_time
     def make_time(*args)
-      t = make_time_orig(*args)
-      t.precision = self.precision(args)
+      time_args = args.shift(Time::MAX_PRECISION)
+      precision = self.precision(time_args)
+      time_args = normalize_new_args(time_args)
+      
+      t = make_time_orig(*[time_args, args].flatten)
+      t.precision = precision
       t
     end
     private :make_time

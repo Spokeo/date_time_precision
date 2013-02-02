@@ -6,13 +6,29 @@ class Time
   
   MAX_PRECISION = DateTimePrecision::SEC
 
-  def self.parse(date, now=self.now)
-    d = Date._parse(date, false)
-    year = d[:year]
-    year = yield(year) if year && block_given?
-    t = make_time(year, d[:mon], d[:mday], d[:hour], d[:min], d[:sec], d[:sec_fraction], d[:zone], now)
-    t.precision = DateTimePrecision::precision(d)
-    t
+  class << self
+    alias_method :mktime_orig, :mktime
+    def mktime(*args)
+      time_args = args.shift(Time::MAX_PRECISION)
+      precision = self.precision(time_args)
+      time_args = normalize_new_args(time_args)
+      
+      t = mktime_orig(*[time_args, args].flatten)
+      t.precision = precision
+      t
+    end
+    
+    alias_method :make_time_orig, :make_time
+    def make_time(*args)
+      time_args = args.shift(Time::MAX_PRECISION)
+      precision = self.precision(time_args)
+      time_args = normalize_new_args(time_args)
+      
+      t = make_time_orig(*[time_args, args].flatten)
+      t.precision = precision
+      t
+    end
+    private :make_time
   end
 
   #def self.strptime(str='-4712-01-01', fmt='%F', sg=Date::ITALY)

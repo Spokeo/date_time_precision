@@ -64,8 +64,10 @@ Or install it yourself as:
 
 ## Wishlist
 
-*   Support Time::mktime, Time::utc, Time::local
-*   Support easy string formatting based on precision
+ - [x] Support Time::mktime
+ - [ ] Support Time::utc
+ - [ ] Support Time::local
+ - [ ] Support easy string formatting based on precision
 
 ## Contributing
 

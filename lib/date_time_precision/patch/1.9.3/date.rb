@@ -10,7 +10,8 @@ class Date
     alias_method :new_orig, :new
     def new(*args)
       precision = self.precision(args)
-      d = new_orig(*args)
+      
+      d = new_orig(*normalize_new_args(args))
       d.precision= precision
       d
     end
@@ -27,13 +28,10 @@ class Date
     
     alias_method :civil_orig, :civil
     def civil(y=nil, m=nil, d=nil, sg=ITALY)
-      vals = [y,m,d]
-      precision = self.precision(vals)
-      unless vals.all?
-        vals = vals.compact
-        vals = vals.concat(NEW_DEFAULTS.slice(vals.length, NEW_DEFAULTS.length - vals.length))
-      end
-      y,m,d = vals
+      args = [y,m,d]
+      precision = self.precision(args)
+
+      y,m,d = normalize_new_args(args)
     
       d = civil_orig(y,m,d,sg)
       d.precision = precision

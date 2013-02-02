@@ -10,7 +10,7 @@ class DateTime < Date
     alias_method :new_orig, :new
     def new(*args)
       precision = self.precision(args)
-      d = new_orig(*args)
+      d = new_orig(*normalize_new_args(args))
       d.precision= precision
       d
     end
@@ -26,16 +26,15 @@ class DateTime < Date
     end
     
     alias_method :civil_orig, :civil
-    def civil(y=nil, m=nil, d=nil, sg=Date::ITALY)
-      vals = [y,m,d]
+    def civil(*args)
+      time_args = args.shift(Time::MAX_PRECISION)
+      precision = self.precision(time_args)
+      time_args = normalize_new_args(time_args)
+      
+      t = civil_org(*[time_args, args].flatten)
       precision = self.precision(vals)
-      unless vals.all?
-        vals = vals.compact
-        vals = vals.concat(NEW_DEFAULTS.slice(vals.length, NEW_DEFAULTS.length - vals.length))
-      end
-      y,m,d = vals
     
-      dt = civil_orig(y,m,d,sg)
+      dt = civil_orig(*[normalize_new_args(vals) , sg].flatten)
       dt.precision = precision
       dt
     end
