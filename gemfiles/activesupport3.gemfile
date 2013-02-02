@@ -2,5 +2,6 @@ source :rubygems
 
 gem 'rake'
 gem 'rspec'
+gem 'json'
 
 gem 'activesupport', '~> 3', :require => false

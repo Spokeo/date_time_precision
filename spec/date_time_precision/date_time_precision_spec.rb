@@ -147,80 +147,103 @@ describe DateTimePrecision do
     end
   end
 
-  context 'Hash' do
-    let(:date_val) { Date.new(1989, 3, 11) }
-    let(:datetime_val) { DateTime.new(1989, 3, 11, 8, 30, 15) }
-    let(:time_val) do
+  context 'Formats' do
+    let(:date) { Date.new(1989, 3, 11) }
+    let(:datetime) { DateTime.new(1989, 3, 11, 8, 30, 15) }
+    let(:time) do
       args = [1989, 3, 11, 8, 30, 15]
       args << 1 if Time::MAX_PRECISION == DateTimePrecision::FRAC
       Time.mktime(*args)
     end
     
-    let(:date_hash) do
-      {
-        :year => 1989,
-        :mon => 3,
-        :mday => 11
-      }
-    end
-    
-    let(:datetime_hash) do
-      {
-        :year => 1989,
-        :mon => 3,
-        :mday => 11,
-        :hour => 8,
-        :min => 30,
-        :sec => 15,
-      }
-    end
-    
-    let(:time_hash) do
-      @time_hash = datetime_hash
-      @time_hash.merge!(:sec_frac => 1) if Time::MAX_PRECISION == DateTimePrecision::FRAC
-      @time_hash
-    end
-    
-    context 'Converting to hash' do
-      it 'should convert Date to a hash' do
-        date_val.to_h.should == date_hash
+    context 'Hash' do
+      let(:date_hash) do
+        {
+          :year => 1989,
+          :mon => 3,
+          :mday => 11
+        }
       end
-      
-      it 'should convert DateTime to a hash' do
-        datetime_val.to_h.should == datetime_hash
+    
+      let(:datetime_hash) do
+        {
+          :year => 1989,
+          :mon => 3,
+          :mday => 11,
+          :hour => 8,
+          :min => 30,
+          :sec => 15,
+        }
       end
+    
+      let(:time_hash) do
+        @time_hash = datetime_hash
+        @time_hash.merge!(:sec_frac => 1) if Time::MAX_PRECISION == DateTimePrecision::FRAC
+        @time_hash
+      end
+    
+      context 'Converting to hash' do
+        it 'should convert Date to a hash' do
+          date.to_h.should == date_hash
+        end
       
-      it 'should convert Time to a hash' do
-        time_val.to_h.should == time_hash
+        it 'should convert DateTime to a hash' do
+          datetime.to_h.should == datetime_hash
+        end
+      
+        it 'should convert Time to a hash' do
+          time.to_h.should == time_hash
+        end
+      end
+  
+      context 'Converting from hash' do
+        it 'should convert a hash to a Date' do
+          date_hash.to_date.should == date
+        end
+    
+        it 'should convert a hash to a DateTime' do
+          datetime_hash.to_datetime.should == datetime
+        end
+    
+        it 'should convert a hash to a Time' do
+          time_hash.to_time.should == time
+        end
+      
+        it 'should accept flexible keys' do
+          {
+            :y => 1989,
+            :m => 3,
+            :d => 11
+          }.to_date.should == date
+        
+          {
+            :year => 1989,
+            :month => 3,
+            :day => 11
+          }.to_date.should == date
+        end
       end
     end
   
-    context 'Converting from hash' do
-      it 'should convert a hash to a Date' do
-        date_hash.to_date.should == date_val
+    context 'JSON' do
+      require 'date_time_precision/format/json'
+      require 'json'
+    
+      it 'should convert a date to a JSON hash' do
+        date.as_json.should == date.to_h
+        date.to_json.should == date.to_h.to_json
       end
     
-      it 'should convert a hash to a DateTime' do
-        datetime_hash.to_datetime.should == datetime_val
-      end
-    
-      it 'should convert a hash to a Time' do
-        time_hash.to_time.should == time_val
+      it 'should convert a datetime to a JSON hash' do
+        datetime.as_json.should == datetime.to_h
+        datetime.to_json.should == datetime.to_h.to_json
       end
       
-      it 'should accept flexible keys' do
-        {
-          :y => 1989,
-          :m => 3,
-          :d => 11
-        }.to_date.should == date_val
-        
-        {
-          :year => 1989,
-          :month => 3,
-          :day => 11
-        }.to_date.should == date_val
+      it 'should convert a time to a JSON hash' do
+        time.as_json.should == time.to_h
+        time.to_json.should == time.to_h.to_json
       end
     end
+    
   end
 end
