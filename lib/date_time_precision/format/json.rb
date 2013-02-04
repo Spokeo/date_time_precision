@@ -1,4 +1,4 @@
-require 'date_time_precision/patch'
+require 'date_time_precision/format/hash'
 
 module DateTimePrecision
   def as_json(*)

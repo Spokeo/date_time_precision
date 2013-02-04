@@ -82,10 +82,6 @@ module DateTimePrecision
     frags
   end
   
-  def to_h
-    Hash[DATE_ATTRIBUTES.keys.map {|attribute| [attribute, self.send(attribute)] if self.send("#{attribute}?") }.compact]
-  end
-  
   # Returns true if dates partially match (i.e. one is a partial date of the other)
   def partial_match?(date2)
     self.class::partial_match?(self, date2)

@@ -23,3 +23,9 @@ class Hash
     self[:sec_frac]]
   end
 end
+
+module DateTimePrecision
+  def to_h
+    Hash[DATE_ATTRIBUTES.keys.map {|attribute| [attribute, self.send(attribute)] if self.send("#{attribute}?") }.compact]
+  end
+end
