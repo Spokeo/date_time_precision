@@ -157,6 +157,8 @@ describe DateTimePrecision do
     end
     
     context 'Hash' do
+      require 'date_time_precision/format/hash'
+    
       let(:date_hash) do
         {
           :year => 1989,

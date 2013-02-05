@@ -1,3 +1,4 @@
+require 'date_time_precision/lib'
 
 class Hash
   DATE_FORMATS = {

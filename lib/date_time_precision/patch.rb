@@ -1,7 +1,6 @@
 require 'date_time_precision/lib'
 
 require 'date_time_precision/format/nil'
-require 'date_time_precision/format/hash'
 
 DateTimePrecision::PATCH_VERSION = begin
   if defined?(JRUBY_VERSION) || (defined?(RUBY_ENGINE) and RUBY_ENGINE == 'rbx')
