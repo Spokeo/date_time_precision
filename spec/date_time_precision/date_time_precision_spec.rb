@@ -195,6 +195,51 @@ describe DateTimePrecision do
           time.to_h.should == time_hash
         end
       end
+      
+      context 'Converting to hash with format' do
+        let(:short_date_hash) do
+          {
+            :y => 1989,
+            :m => 3,
+            :d => 11
+          }
+        end
+        
+        let(:long_date_hash) do
+          {
+            :year => 1989,
+            :month => 3,
+            :day => 11
+          }
+        end
+        
+        it 'should convert Date to a short hash' do
+          date.to_h(:short).should == short_date_hash
+        end
+      
+        it 'should convert DateTime to a long hash' do
+          datetime.to_h(:long).should == long_date_hash
+        end
+      
+        it 'should convert Time to a custom hash' do
+          Hash::DATE_FORMATS[:custom] = [:year, :mon, :d, :h, :min, :s]
+          
+          time.to_h(:custom).should == {
+            :year => 1989,
+            :mon => 3,
+            :d => 11,
+            :h => 8,
+            :min => 30,
+            :s => 15,
+          }
+        end
+        
+        it 'should convert to the default hash format' do
+          Hash::DATE_FORMATS[:default] = Hash::DATE_FORMATS[:short]
+          date.to_h(:short).should == short_date_hash
+          Hash::DATE_FORMATS[:default] = Hash::DATE_FORMATS[:ruby]
+        end
+      end
   
       context 'Converting from hash' do
         it 'should convert a hash to a Date' do

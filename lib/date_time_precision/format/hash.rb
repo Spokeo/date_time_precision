@@ -1,5 +1,12 @@
 
 class Hash
+  DATE_FORMATS = {
+    :short => [:y, :m, :d],
+    :long => [:year, :month, :day],
+    :ruby => [:year, :mon, :mday, :hour, :min, :sec, :sec_frac]
+  }
+  DATE_FORMATS[:default] = DATE_FORMATS[:ruby]
+  
   def to_time
     Time.mktime(*date_time_args)
   end
@@ -25,7 +32,12 @@ class Hash
 end
 
 module DateTimePrecision
-  def to_h
-    Hash[DATE_ATTRIBUTES.keys.map {|attribute| [attribute, self.send(attribute)] if self.send("#{attribute}?") }.compact]
+  def to_h(format = nil)
+    keys = Hash::DATE_FORMATS[format || :default]
+    
+    Hash[keys.each_with_index.map do |key,i|
+      attribute_name = Hash::DATE_FORMATS[:ruby][i]
+      [key, self.send(attribute_name)] if self.send("#{attribute_name}?")
+    end.compact]
   end
 end
