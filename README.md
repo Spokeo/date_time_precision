@@ -40,6 +40,34 @@ The gem adds the following instance methods to Date, Time, and/or DateTime:
 *    min?
 *    sec?
 
+## Formats
+
+It is useful to convert the various time classes into other formats that preserve the precision. The currently supported formats are Hash and JSON.
+
+Examples:
+
+```ruby
+require 'date_time_precision/format/hash'
+
+date = Date.new(2000, 10)
+hash = date.to_h
+ => {:year=>2000, :mon=>10}
+
+hash.to_date.precision
+ => 2 
+```
+
+```ruby
+require 'date_time_precision/format/json'
+
+date = Date.new(2000, 10)
+puts json = date.to_json
+ => {"year":2000,"mon":10}
+
+JSON.parse(json).to_date.precision
+ => 2
+```
+
 ## Compatibility
 
 Tested in MRI 1.8.7/1.9.2/1.9.3, REE, JRuby 1.8/1.9, and Rubinius 1.8/1.9.
