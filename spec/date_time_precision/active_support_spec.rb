@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'json'
 require 'active_support'
 
 require 'active_support/core_ext/date/conversions'
@@ -8,6 +9,8 @@ begin
 rescue LoadError; end
 
 require 'date_time_precision'
+
+require 'date_time_precision/format/json'
 
 describe DateTimePrecision, 'Conversions' do  
   context 'when converting from Date to Time or DateTime' do
@@ -24,5 +27,20 @@ describe DateTimePrecision, 'Conversions' do
     t.precision.should == DateTimePrecision::SEC
     t.to_datetime.precision.should == DateTime::MAX_PRECISION
     t.to_date.precision.should == DateTimePrecision::DAY
+  end
+  
+  it 'will convert a date to a hash' do
+    date = Date.new(1999, 10)
+    date.as_json.should == date.to_h
+  end
+  
+  it 'will retain precision when converting to and from JSON' do
+    date = Date.new(1999, 10)
+    date.precision.should == DateTimePrecision::MONTH
+    json = ActiveSupport::JSON.encode(date)
+    
+    date_from_json = ActiveSupport::JSON.decode(json).to_date
+    date_from_json.precision.should == date.precision
+    
   end
 end
