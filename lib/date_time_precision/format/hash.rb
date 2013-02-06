@@ -22,7 +22,7 @@ class Hash
   
   protected
   def date_time_args
-    [self[:year] || self[:y] || self['year'] || self['y'],
+    [self[:year] || self[:y] || self[:yr] || self['year'] || self['y'] || self['yr'],
     self[:mon] || self[:m] || self[:month] || self['mon'] || self['m'] || self['month'],
     self[:mday] || self[:d] || self[:day] || self['mday'] || self['d'] || self['day'],
     self[:hour] || self[:h] || self[:hr] || self['hour'] || self['h'] || self['hr'],
