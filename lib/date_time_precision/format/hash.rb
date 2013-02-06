@@ -42,3 +42,6 @@ module DateTimePrecision
     end.compact]
   end
 end
+
+require 'date_time_precision/compat/virtus'
+require 'date_time_precision/compat/coercible'

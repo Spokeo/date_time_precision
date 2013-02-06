@@ -11,3 +11,9 @@ RSpec::Core::RakeTask.new(:active_support_spec) do |t|
   t.verbose = true
   t.pattern = "spec/date_time_precision/active_support_spec.rb"
 end
+
+desc "Run Compatibility spec"
+RSpec::Core::RakeTask.new(:compatibility_spec) do |t|
+  t.verbose = true
+  t.pattern = "spec/date_time_precision/compatibility_spec.rb"
+end

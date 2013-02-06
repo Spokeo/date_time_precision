@@ -2,6 +2,9 @@ source :rubygems
 
 gem 'rake'
 gem 'rspec'
-gem 'json'
 
 gem 'activesupport', '~> 3', :require => false
+
+gem 'json'
+gem 'virtus', '0.5.4'
+gem 'coercible'
