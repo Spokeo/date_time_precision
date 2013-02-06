@@ -1,9 +1,9 @@
 if defined?(ActiveSupport)
-  require 'active_support/core_ext/date/conversions'
-  require 'active_support/core_ext/time/conversions'
-  begin
-    require 'active_support/core_ext/datetime/conversions'
-  rescue LoadError; end
+  ['active_support/core_ext/date', 'active_support/core_ext/datetime', 'active_support/core_ext/time', 'active_support/time'].each do |f|
+    begin
+      require f
+    rescue LoadError; end
+  end
 end
 
 module DateTimePrecision
@@ -127,8 +127,7 @@ module DateTimePrecision
     # Redefine any conversion methods so precision is preserved
     [:to_date, :to_time, :to_datetime].each do |conversion_method|
       orig = :"orig_#{conversion_method}"
-      instance_methods = base.instance_methods(false).map{|m| m.to_sym}
-      if instance_methods.include?(:to_date) && !instance_methods.include?(orig)
+      if base.method_defined?(conversion_method) && !base.method_defined?(orig)
         base.class_exec {
           alias_method orig, conversion_method
           define_method(conversion_method) {
