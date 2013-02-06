@@ -68,13 +68,30 @@ JSON.parse(json).to_date.precision
  => 2
 ```
 
-## Compatibility
+## Ruby Compatibility
 
 Tested in MRI 1.8.7/1.9.2/1.9.3, REE, JRuby 1.8/1.9, and Rubinius 1.8/1.9.
 
 Note that starting in MRI 1.9.3, the core Date/Time classes were rewritten in C, making it difficult to
 override internal functionality. Some functions are now implemented internally and are not exposed.
 The workaround is inefficient: `#parse` and `#strptime` perform the same work twice, once to get the precision and once inside the original C method.
+
+## Gem Compatibility
+
+Sometimes other gems will use the Date/Time class in ways that don't preserve precision. If you want to use the DateTimePrecision gem with these
+gems, any compatibility issues will most likely need to be patched within DateTimePrecision itself. This is because DateTimePrecision makes some
+modifications to how the core Date/Time classes work. (For example, by allowing nil values to be passed to constructors.)
+
+So far, the following gems are on the compatibility watch list:
+
+ - [x] [ActiveSupport](https://github.com/rails/rails/tree/master/activesupport)
+ - [x] [Virtus](https://github.com/solnic/virtus)
+ - [x] [Coercible](https://github.com/solnic/coercible)
+ - [ ] [Chronic](https://github.com/mojombo/chronic)
+ - [ ] [Timeliness](https://github.com/adzap/timeliness)
+ - [ ] [Timecop](https://github.com/travisjeffery/timecop)
+
+If you know of any others, feel free to submit a pull request!
 
 ## Installation
 
