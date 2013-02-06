@@ -127,7 +127,7 @@ module DateTimePrecision
     # Redefine any conversion methods so precision is preserved
     [:to_date, :to_time, :to_datetime].each do |conversion_method|
       orig = :"orig_#{conversion_method}"
-      if base.method_defined?(conversion_method) && !base.method_defined?(orig)
+      if base.method_defined?(conversion_method) && !base.instance_methods(false).map(&:to_sym).include?(orig)
         base.class_exec {
           alias_method orig, conversion_method
           define_method(conversion_method) {
