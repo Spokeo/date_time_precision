@@ -1,3 +1,11 @@
+if defined?(ActiveSupport)
+  require 'active_support/core_ext/date/conversions'
+  require 'active_support/core_ext/time/conversions'
+  begin
+    require 'active_support/core_ext/datetime/conversions'
+  rescue LoadError; end
+end
+
 module DateTimePrecision
   unless constants.include? "NONE"
     FRAC  = 7
@@ -117,12 +125,13 @@ module DateTimePrecision
 
   def self.included(base)
     # Redefine any conversion methods so precision is preserved
-    [:to_date, :to_time, :to_datetime].each do |m|
-      orig = :"orig_#{m}"
-      if base.method_defined?(m) && !base.method_defined?(orig)
+    [:to_date, :to_time, :to_datetime].each do |conversion_method|
+      orig = :"orig_#{conversion_method}"
+      instance_methods = base.instance_methods(false).map{|m| m.to_sym}
+      if instance_methods.include?(:to_date) && !instance_methods.include?(orig)
         base.class_exec {
-          alias_method orig, m
-          define_method(m) {
+          alias_method orig, conversion_method
+          define_method(conversion_method) {
             d = send(orig)
             d.precision = [self.precision, d.class::MAX_PRECISION].min
             d

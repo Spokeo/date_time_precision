@@ -2,12 +2,6 @@ require 'spec_helper'
 require 'json'
 require 'active_support'
 
-require 'active_support/core_ext/date/conversions'
-require 'active_support/core_ext/time/conversions'
-begin
-  require 'active_support/core_ext/datetime/conversions'
-rescue LoadError; end
-
 require 'date_time_precision'
 
 require 'date_time_precision/format/json'
@@ -15,10 +9,10 @@ require 'date_time_precision/format/json'
 describe DateTimePrecision, 'Conversions' do  
   context 'when converting from Date to Time or DateTime' do
     it 'should maintain precision' do
-      d = Date.new(2005, 1, 2)
-      d.precision.should == DateTimePrecision::DAY
-      d.to_date.precision.should == DateTimePrecision::DAY
-      d.to_datetime.precision.should == DateTimePrecision::DAY
+      d = Date.new(2005, 1)
+      d.precision.should == DateTimePrecision::MONTH
+      d.to_date.precision.should == DateTimePrecision::MONTH
+      d.to_datetime.precision.should == DateTimePrecision::MONTH
     end
   end
   
