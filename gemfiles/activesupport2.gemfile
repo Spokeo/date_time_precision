@@ -7,4 +7,4 @@ gem 'activesupport', '~> 2', :require => false
 
 gem 'json'
 gem 'virtus', '0.5.4'
-gem 'coercible'
+gem 'coercible', '0.0.1'
