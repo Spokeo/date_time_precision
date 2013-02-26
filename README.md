@@ -70,7 +70,7 @@ JSON.parse(json).to_date.precision
 
 ## Ruby Compatibility
 
-Tested in MRI 1.8.7/1.9.2/1.9.3, REE, JRuby 1.8/1.9, and Rubinius 1.8/1.9.
+Tested in MRI 1.8.7/1.9.2/1.9.3/2.0.0, REE, JRuby 1.8/1.9, and Rubinius 1.8/1.9.
 
 Note that starting in MRI 1.9.3, the core Date/Time classes were rewritten in C, making it difficult to
 override internal functionality. Some functions are now implemented internally and are not exposed.
