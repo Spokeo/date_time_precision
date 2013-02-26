@@ -43,5 +43,5 @@ module DateTimePrecision
   end
 end
 
-require 'date_time_precision/compat/virtus'
-require 'date_time_precision/compat/coercible'
+require 'date_time_precision/compat/virtus' if defined?(Virtus)
+require 'date_time_precision/compat/coercible' if defined?(Coercible)

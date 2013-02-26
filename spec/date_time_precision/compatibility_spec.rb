@@ -20,8 +20,10 @@ describe DateTimePrecision do
     let(:time_hash) { {:yr => 1950, 'm' => 5, :day => 19, :hr => 5} }
     
     context 'with Virtus' do
+      require 'date_time_precision/compat/virtus'
+      
       let(:model) { VirtusModel.new }
-      before(:all) do
+      before(:each) do
         model.date = date_hash
         model.datetime = datetime_hash
         model.time = time_hash
@@ -57,6 +59,8 @@ describe DateTimePrecision do
     end
     
     context 'with Coercible' do
+      require 'date_time_precision/compat/coercible'
+      
       let(:coercer) { Coercible::Coercer::Hash.new }
       
       context 'when coercing a hash to a Date' do
