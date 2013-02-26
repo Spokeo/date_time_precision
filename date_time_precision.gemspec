@@ -22,5 +22,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'json'
   
   gem.add_development_dependency 'virtus', '0.5.4'
-  gem.add_development_dependency 'coercible'
+  gem.add_development_dependency 'coercible', '0.0.1'
 end
