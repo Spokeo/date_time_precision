@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'json'
+require 'securerandom'
 require 'active_support'
 
 require 'date_time_precision'
