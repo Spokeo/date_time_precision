@@ -2,9 +2,9 @@ require 'date_time_precision/lib'
 require 'date'
 
 class Date
-  include DateTimePrecision
-
   MAX_PRECISION = DateTimePrecision::DAY
+  
+  include DateTimePrecision
 
   def self.parse(str='-4712-01-01T00:00:00+00:00', comp=false, sg=ITALY)
     elem = _parse(str, comp)
@@ -23,21 +23,19 @@ class Date
   end
 
   def self.civil(y=nil, m=nil, d=nil, sg=ITALY)
-    vals = [y,m,d]
-    precision = DateTimePrecision::precision(vals)
-    unless vals.all?
-      vals = vals.compact
-      vals = vals.concat(NEW_DEFAULTS.slice(vals.length, NEW_DEFAULTS.length - vals.length))
-    end
-    y,m,d = vals
+    args = [y,m,d]
+    precision = self.precision(args)
+
+    args = normalize_new_args(args)
   
-    unless jd = valid_civil?(y, m, d, sg)
+    unless jd = valid_civil?(*args)
       raise ArgumentError, 'invalid date'
     end
   
-    d = new!(jd_to_ajd(jd, 0, 0), 0, sg)
-    d.precision = precision
-    d
+    date = new!(jd_to_ajd(jd, 0, 0), 0, sg)
+    date.precision = precision
+    date.attributes_set(y,m,d)
+    date
   end
 
   class << self; alias_method :new, :civil end

@@ -33,7 +33,7 @@ describe DateTimePrecision do
       d.day?.should be_false
     end
   
-    it 'should have day precision when year, month, and day are passed in' do
+    it 'has day precision when year, month, and day are passed in' do
       dt = DateTime.new(1987,10,19)
       dt.precision.should == DateTimePrecision::DAY
       dt.year?.should be_true
@@ -42,7 +42,7 @@ describe DateTimePrecision do
       dt.hour?.should be_false
     end
   
-    it 'should have hour precision' do
+    it 'has hour precision' do
       dt = DateTime.new(1970, 1, 2, 3)
       dt.precision.should == DateTimePrecision::HOUR
       dt.year?.should be_true
@@ -51,15 +51,26 @@ describe DateTimePrecision do
       dt.hour?.should be_true
       dt.min?.should be_false
     end
+    
+    it 'tracks which attributes were explicitly set separately from precision' do
+      [Date.new(nil, 11, 12), DateTime.new(nil, 10, 11, nil), Time.mktime(nil, 12, 13, nil, 14)].each do |d|
+        d.year?.should be_false
+        d.month?.should be_true
+        d.day?.should be_true
+        d.hour?.should be_false
+        d.min?.should be_true if d.is_a? Time
+        d.precision.should == DateTimePrecision::NONE
+      end
+    end
   
-    it 'should have max precision for fully specified dates/times' do
+    it 'has max precision for fully specified dates/times' do
       # Time.new is an alias for Time.now
       [Time.new, Time.now, DateTime.now, Date.today].each do |t|
         t.precision.should == t.class::MAX_PRECISION
       end
     end
     
-    it 'should accept nil values in the constructor' do
+    it 'accepts nil values in the constructor' do
       Date.new(nil).precision.should == DateTimePrecision::NONE
       Date.new(2000, nil).precision.should == DateTimePrecision::YEAR
       DateTime.new(2000, 1, nil).precision.should == DateTimePrecision::MONTH
@@ -163,7 +174,7 @@ describe DateTimePrecision do
         {
           :year => 1989,
           :mon => 3,
-          :mday => 11
+          :day => 11
         }
       end
     
@@ -171,7 +182,7 @@ describe DateTimePrecision do
         {
           :year => 1989,
           :mon => 3,
-          :mday => 11,
+          :day => 11,
           :hour => 8,
           :min => 30,
           :sec => 15,
@@ -195,6 +206,10 @@ describe DateTimePrecision do
       
         it 'should convert Time to a hash' do
           time.to_h.should == time_hash
+        end
+        
+        it 'should skip year if not included' do
+          Date.new(nil, 8, 10).to_h.should == {:mon => 8, :day => 10}
         end
       end
       
@@ -241,22 +256,28 @@ describe DateTimePrecision do
           date.to_h(:short).should == short_date_hash
           Hash::DATE_FORMATS[:default] = Hash::DATE_FORMATS[:ruby]
         end
+        
+        it 'should only include fields that were set' do
+          Date.new(nil, 3, 8).to_h.should == {:mon => 3, :day => 8}
+          DateTime.new(nil, 5, 6, nil, 7).to_h.should == {:mon => 5, :day => 6, :min => 7}
+          Time.mktime(nil, 1, nil, 9, nil, 10).to_h.should == {:mon => 1, :hour => 9, :sec => 10}
+        end
       end
   
       context 'Converting from hash' do
-        it 'should convert a hash to a Date' do
+        it 'converts a hash to a Date' do
           date_hash.to_date.should == date
         end
     
-        it 'should convert a hash to a DateTime' do
+        it 'converts a hash to a DateTime' do
           datetime_hash.to_datetime.should == datetime
         end
     
-        it 'should convert a hash to a Time' do
+        it 'converts a hash to a Time' do
           time_hash.to_time.should == time
         end
       
-        it 'should accept flexible keys' do
+        it 'accepts flexible keys' do
           {
             :y => 1989,
             :m => 3,
@@ -268,6 +289,23 @@ describe DateTimePrecision do
             :month => 3,
             :day => 11
           }.to_date.should == date
+        end
+        
+        [:date, :datetime, :time].each do |klass|
+          it "accepts month and day without year when converting to a #{klass}" do
+            date = { :month => 5, :day => 18, :min => 48 }.send("to_#{klass}")
+            date.year?.should be_false
+            date.month?.should be_true
+            date.month.should == 5
+            date.day?.should be_true
+            date.day.should == 18
+            date.hour?.should be_false
+            
+            unless klass == :date
+              date.min?.should be_true
+              date.min.should == 48
+            end
+          end
         end
       end
     end

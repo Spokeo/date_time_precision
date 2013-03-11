@@ -2,9 +2,9 @@ require 'date_time_precision/lib'
 require 'date'
 
 class DateTime < Date
-  include DateTimePrecision
-
   MAX_PRECISION = DateTimePrecision::SEC
+  
+  include DateTimePrecision
 
   def self.parse(str='-4712-01-01T00:00:00+00:00', comp=false, sg=ITALY)
     elem = _parse(str, comp)
@@ -15,15 +15,11 @@ class DateTime < Date
   end
 
   def self.civil(y=nil, m=nil, d=nil, h=nil, min=nil, s=nil, of=0, sg=ITALY)
-    vals = [y,m,d,h,min,s]
-    precision = DateTimePrecision::precision(vals)
-    unless vals.all?
-      vals = vals.compact
-      vals = vals.concat(NEW_DEFAULTS.slice(vals.length, NEW_DEFAULTS.length - vals.length))
-    end
-    y,m,d,h,min,s = vals
+    time_args = [y,m,d,h,min,s]
+    precision = self.precision(time_args)
+    time_args = normalize_new_args(time_args)
   
-    unless (jd = valid_civil?(y, m, d, sg)) && (fr = valid_time?(h, min, s))
+    unless (jd = valid_civil?(time_args[0], time_args[1], time_args[2], sg)) && (fr = valid_time?(time_args[3], time_args[4], time_args[5]))
       raise ArgumentError, 'invalid date'
     end
     if String === of
@@ -31,6 +27,7 @@ class DateTime < Date
     end
     dt = new!(jd_to_ajd(jd, fr, of), of, sg)
     dt.precision = precision
+    dt.attributes_set(y,m,d,h,min,s)
     dt
   end
 

@@ -20,10 +20,20 @@ module DateTimePrecision
     # Default values for y,m,d,h,m,s,frac
     NEW_DEFAULTS = [-4712,1,1,0,0,0,0]
     
-    DATE_ATTRIBUTES = {
+    DATE_ATTRIBUTES = [
+      :year,
+      :mon,
+      :day,
+      :hour,
+      :min,
+      :sec,
+      :sec_frac
+    ]
+    
+    DATE_ATTRIBUTE_PRECISIONS = {
       :year => YEAR,
       :mon => MONTH,
-      :mday => DAY,
+      :day => DAY,
       :hour => HOUR,
       :min => MIN,
       :sec => SEC,
@@ -56,26 +66,19 @@ module DateTimePrecision
         MIN
       when val[:hour]
         HOUR
-      when val[:mday], val[:day]
+      when val[:mday], val[:day], val[:d]
         DAY
-      when val[:mon], val[:month]
+      when val[:mon], val[:month], val[:m]
         MONTH
-      when val[:year]
+      when val[:year], val[:y]
         YEAR
       else
         NONE
       end
     when Array
-      val.compact.length
+      val.index{|v| v.nil?} || val.length
     else
       NONE
-    end
-  end
-
-  # Define attribute query methods
-  DATE_ATTRIBUTES.each do |attribute_name, precision|
-    define_method "#{attribute_name}?" do
-      return self.precision >= precision
     end
   end
   
@@ -116,8 +119,10 @@ module DateTimePrecision
     
     def normalize_new_args(args)
       unless args.all?
-        args = args.compact
-        args = args.concat(DateTimePrecision::NEW_DEFAULTS.slice(args.length, DateTimePrecision::NEW_DEFAULTS.length - args.length))
+        # Replace nil values with their corresponding default values
+        args = args.each_with_index.map do |val,i|
+          val || DateTimePrecision::NEW_DEFAULTS[i]
+        end
       end
       args.take(self::MAX_PRECISION)
     end
@@ -133,6 +138,9 @@ module DateTimePrecision
           define_method(conversion_method) {
             d = send(orig)
             d.precision = [self.precision, d.class::MAX_PRECISION].min
+            DATE_ATTRIBUTES.each do |attribute|
+              d.instance_variable_set(:"@#{attribute}_set", self.instance_variable_get(:"@#{attribute}_set"))
+            end
             d
           }
         }
@@ -142,7 +150,29 @@ module DateTimePrecision
     # Extend with this module's class methods
     base.extend(ClassMethods)
     
-    base.instance_eval do
+    # Define attribute query methods
+    DATE_ATTRIBUTE_PRECISIONS.each do |attribute_name, precision|
+      #next unless precision <= base::MAX_PRECISION
+      
+      base.class_eval <<-EOM, __FILE__, __LINE__
+        def #{attribute_name}?
+          return !@#{attribute_name}_set.nil? ? @#{attribute_name}_set : (self.precision >= #{precision})
+        end
+
+        def #{attribute_name}_set=(val)
+          @#{attribute_name}_set = !!val
+        end
+        protected :#{attribute_name}_set=
+      EOM
+    end
+    
+    base.class_eval <<-EOM, __FILE__, __LINE__
+      def attributes_set(*vals)
+        #{DATE_ATTRIBUTES.map{|attribute| "@#{attribute}_set"}.join(', ')} = *(vals.flatten.map{|v| !!v})
+      end
+    EOM
+    
+    base.class_eval do
       if method_defined?(:usec)
         alias_method :usec?, :sec_frac?
         alias_method :sec_frac, :usec
@@ -155,7 +185,7 @@ module DateTimePrecision
       alias_method :month?, :mon?
 
       alias_method :mday, :day
-      alias_method :day?, :mday?
+      alias_method :mday?, :day?
     end
   end
 end

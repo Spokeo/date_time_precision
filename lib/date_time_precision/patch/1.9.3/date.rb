@@ -12,7 +12,8 @@ class Date
       precision = self.precision(args)
       
       d = new_orig(*normalize_new_args(args))
-      d.precision= precision
+      d.precision = precision
+      d.attributes_set(*args)
       d
     end
     
@@ -31,11 +32,12 @@ class Date
       args = [y,m,d]
       precision = self.precision(args)
 
-      y,m,d = normalize_new_args(args)
+      args = [normalize_new_args(args), sg].flatten
     
-      d = civil_orig(y,m,d,sg)
-      d.precision = precision
-      d
+      date = civil_orig(*args)
+      date.precision = precision
+      date.attributes_set(y,m,d)
+      date
     end
     
     alias_method :strptime_orig, :strptime

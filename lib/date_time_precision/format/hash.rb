@@ -4,7 +4,7 @@ class Hash
   DATE_FORMATS = {
     :short => [:y, :m, :d],
     :long => [:year, :month, :day],
-    :ruby => [:year, :mon, :mday, :hour, :min, :sec, :sec_frac]
+    :ruby => [:year, :mon, :day, :hour, :min, :sec, :sec_frac]
   }
   DATE_FORMATS[:default] = DATE_FORMATS[:ruby]
   
