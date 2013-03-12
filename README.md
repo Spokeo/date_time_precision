@@ -21,11 +21,15 @@ The behavior of these classes should otherwise remain unchanged.
 require 'date_time_precision'
 
 d = Date.new(2000)
-d.precision # => DateTimePrecision::YEAR
+d.precision  # => DateTimePrecision::YEAR
 
 t = Time::parse("2001-05")
-t.precision # => DateTimePrecision::MONTH
+t.precision  # => DateTimePrecision::MONTH
 t.precision > d.precision # => true
+
+dt = DateTime.new(nil, 7, 4)
+dt.year?     # => false
+dt.month?    # => true
 ```
 
 The gem adds the following instance methods to Date, Time, and/or DateTime:
@@ -54,7 +58,11 @@ hash = date.to_h
  => {:year=>2000, :mon=>10}
 
 hash.to_date.precision
- => 2 
+ => 2
+
+birthday = Date.new(nil, 11, 12)
+birthday.to_h
+ => {:mon => 11, :day => 12}
 ```
 
 ```ruby
@@ -113,6 +121,7 @@ Or install it yourself as:
  - [ ] Support Time::utc
  - [ ] Support Time::local
  - [ ] Support easy string formatting based on precision
+ - [ ] Support correct parsing and generation of ISO 8601 format, which supports partial dates
 
 ## Contributing
 
