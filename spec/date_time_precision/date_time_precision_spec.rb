@@ -202,7 +202,6 @@ describe DateTimePrecision do
       end
       
       it 'should convert a time to ISO 8601' do
-        time.utc.iso8601.should == "1989-03-11T16:30:15Z"
         Time.utc(1900).utc.iso8601.should == "1900"
         Time.mktime(1990, 5).utc.iso8601.should == "1990-05"
         Time.mktime(1990, 5, 2).utc.iso8601.should == "1990-05-02"
