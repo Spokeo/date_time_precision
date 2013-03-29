@@ -77,6 +77,22 @@ describe DateTimePrecision do
       Time.mktime(2000, 1, 1, nil, nil).precision.should == DateTimePrecision::DAY
     end
   end
+  
+  context 'Time Zones' do
+    it 'should retain precision when switching to UTC' do
+      Time.mktime(2000).utc.precision.should == DateTimePrecision::YEAR
+      Time.mktime(2000).gmtime.precision.should == DateTimePrecision::YEAR
+    end
+    
+    it 'should track precision when creating a time in UTC' do
+      Time.utc(1945, 10).precision.should == DateTimePrecision::MONTH
+      Time.gm(1945, 10).precision.should == DateTimePrecision::MONTH
+    end
+    
+    it 'should track precision when creating a time in the local timezone' do
+      Time.local(2004, 5, 6).precision.should == DateTimePrecision::DAY
+    end
+  end
 
   context 'Parsing' do
     it 'should have second/frac precision when parsing a timestamp' do
@@ -165,6 +181,35 @@ describe DateTimePrecision do
       args = [1989, 3, 11, 8, 30, 15]
       args << 1 if Time::MAX_PRECISION == DateTimePrecision::FRAC
       Time.mktime(*args)
+    end
+    
+    context 'ISO 8601' do
+      require 'date_time_precision/format/iso8601'
+      
+      it 'should convert a date to ISO 8601' do
+        date.iso8601.should == "1989-03-11"
+        Date.new(1990, 5).iso8601.should == "1990-05"
+        Date.new(1800).iso8601.should == "1800"
+      end
+      
+      it 'should convert a datetime to ISO 8601' do
+        datetime.iso8601.should == "1989-03-11T08:30:15Z"
+        DateTime.new(1900).iso8601.should == "1900"
+        DateTime.new(1990, 5).iso8601.should == "1990-05"
+        DateTime.new(1990, 5, 2).iso8601.should == "1990-05-02"
+        DateTime.new(1990, 5, 2, 12).iso8601.should == "1990-05-02T12Z"
+        DateTime.new(1990, 5, 2, 12, 30).iso8601.should == "1990-05-02T12:30Z"
+      end
+      
+      it 'should convert a time to ISO 8601' do
+        time.utc.iso8601.should == "1989-03-11T16:30:15Z"
+        Time.utc(1900).utc.iso8601.should == "1900"
+        Time.mktime(1990, 5).utc.iso8601.should == "1990-05"
+        Time.mktime(1990, 5, 2).utc.iso8601.should == "1990-05-02"
+        Time.utc(1990, 5, 2, 12).iso8601.should == "1990-05-02T12Z"
+        Time.utc(1990, 5, 2, 12, 30).utc.iso8601.should == "1990-05-02T12:30Z"
+        Time.utc(1990, 5, 2, 12, 30, 45).utc.iso8601.should == "1990-05-02T12:30:45Z"
+      end
     end
     
     context 'Hash' do

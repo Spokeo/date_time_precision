@@ -76,6 +76,13 @@ JSON.parse(json).to_date.precision
  => 2
 ```
 
+```ruby
+require 'date_time_precision/format/iso8601'
+
+Date.new(2000, 5).iso8601
+ => "2000-05"
+```
+
 ## Ruby Compatibility
 
 Tested in MRI 1.8.7/1.9.2/1.9.3/2.0.0, REE, JRuby 1.8/1.9, and Rubinius 1.8/1.9.
@@ -118,10 +125,11 @@ Or install it yourself as:
 ## Wishlist
 
  - [x] Support Time::mktime
- - [ ] Support Time::utc
- - [ ] Support Time::local
+ - [x] Support Time::utc and Time#utc
+ - [x] Support Time::local
+ - [.] Support correct generation (done) and parsing (not done) of the ISO 8601 format, which supports partial dates
+ - [ ] Support the various time zone methods (partially done)
  - [ ] Support easy string formatting based on precision
- - [ ] Support correct parsing and generation of ISO 8601 format, which supports partial dates
 
 ## Contributing
 

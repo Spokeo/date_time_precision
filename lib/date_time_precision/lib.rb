@@ -1,8 +1,22 @@
 if defined?(ActiveSupport)
-  ['active_support/core_ext/date', 'active_support/core_ext/datetime', 'active_support/core_ext/time', 'active_support/time'].each do |f|
+  ['active_support/core_ext/date', 'active_support/core_ext/datetime', 'active_support/core_ext/time', 'active_support/time', 'active_support/time_with_zone'].each do |f|
     begin
       require f
     rescue LoadError; end
+  end
+end
+
+class Date
+  unless method_defined?(:utc?)
+    def utc?
+      offset == 0
+    end
+  end
+  
+  unless method_defined?(:utc_offset)
+    def utc_offset
+      offset.numerator*3600
+    end
   end
 end
 
