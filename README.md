@@ -46,7 +46,8 @@ The gem adds the following instance methods to Date, Time, and/or DateTime:
 
 ## Formats
 
-It is useful to convert the various time classes into other formats that preserve the precision. The currently supported formats are Hash and JSON.
+It is useful to convert the various time classes into other formats that preserve the precision.
+The currently supported formats are Hash, JSON, and ISO 8601.
 
 Examples:
 
@@ -55,14 +56,14 @@ require 'date_time_precision/format/hash'
 
 date = Date.new(2000, 10)
 hash = date.to_h
- => {:year=>2000, :mon=>10}
+# => {:year=>2000, :mon=>10}
 
 hash.to_date.precision
  => 2
 
 birthday = Date.new(nil, 11, 12)
 birthday.to_h
- => {:mon => 11, :day => 12}
+# => {:mon => 11, :day => 12}
 ```
 
 ```ruby
@@ -70,17 +71,17 @@ require 'date_time_precision/format/json'
 
 date = Date.new(2000, 10)
 puts json = date.to_json
- => {"year":2000,"mon":10}
+# => {"year":2000,"mon":10}
 
 JSON.parse(json).to_date.precision
- => 2
+# => 2
 ```
 
 ```ruby
 require 'date_time_precision/format/iso8601'
 
 Date.new(2000, 5).iso8601
- => "2000-05"
+# => "2000-05"
 ```
 
 ## Ruby Compatibility
