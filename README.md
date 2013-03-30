@@ -6,8 +6,8 @@ Unfortunately, Ruby's built-in Date, Time, and DateTime classes do not keep trac
 For example:
 
 ```ruby
-Date.new.to_s         => "-4712-01-01"
-Date.new(2000).to_s   => "2000-01-01"
+Date.new.to_s        # => "-4712-01-01"
+Date.new(2000).to_s  # => "2000-01-01"
 ```
 
 There is no way to tell the difference between January 1, 2000 and a Date where only the year 2000 was known.
@@ -59,7 +59,7 @@ hash = date.to_h
 # => {:year=>2000, :mon=>10}
 
 hash.to_date.precision
- => 2
+# => 2
 
 birthday = Date.new(nil, 11, 12)
 birthday.to_h
