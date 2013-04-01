@@ -1,8 +1,10 @@
+module DateTimePrecision
+  ISO8601_DATE_FRAGMENTS = %w(%0*d %02d %02d)
+  ISO8601_TIME_FRAGMENTS = %w(%02d %02d %02d)
+end
+
 [Date, Time, DateTime].each do |klass|
   klass.class_eval do
-    ISO8601_DATE_FRAGMENTS = %w(%0*d %02d %02d)
-    ISO8601_TIME_FRAGMENTS = %w(%02d %02d %02d)
-
     if method_defined?(:xmlschema)
       alias_method :xmlschema_without_precision, :xmlschema
     end
@@ -19,11 +21,11 @@
       format = ""
       if precision > DateTimePrecision::NONE
         # Add date part to format
-        format << ISO8601_DATE_FRAGMENTS.take([3,self.precision].min).join('-')
+        format << DateTimePrecision::ISO8601_DATE_FRAGMENTS.take([3,self.precision].min).join('-')
       end
 
       if precision > DateTimePrecision::DAY
-        format << "T#{ISO8601_TIME_FRAGMENTS.take(precision - 3).join(':')}"
+        format << "T#{DateTimePrecision::ISO8601_TIME_FRAGMENTS.take(precision - 3).join(':')}"
       end
 
       output = sprintf(format, year < 0 ? 5 : 4, *self.fragments)
