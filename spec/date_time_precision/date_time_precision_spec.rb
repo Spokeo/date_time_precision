@@ -277,9 +277,31 @@ describe DateTimePrecision do
         it 'should convert Date to a short hash' do
           date.to_h(:short).should == short_date_hash
         end
+
+        it 'should convert Date to a long hash' do
+          date.to_h(:long).should == long_date_hash
+        end
       
         it 'should convert DateTime to a long hash' do
-          datetime.to_h(:long).should == long_date_hash
+          datetime.to_h(:long).should == {
+            :year => 1989,
+            :month => 3,
+            :day => 11,
+            :hour => 8,
+            :minute => 30,
+            :second => 15
+          }
+        end
+
+        it 'should convert Time to a short hash' do
+          time.to_h(:short).should == {
+            :y => 1989,
+            :m => 3,
+            :d => 11,
+            :h => 8,
+            :min => 30,
+            :s => 15
+          }
         end
       
         it 'should convert Time to a custom hash' do

@@ -2,8 +2,8 @@ require 'date_time_precision/lib'
 
 class Hash
   DATE_FORMATS = {
-    :short => [:y, :m, :d],
-    :long => [:year, :month, :day],
+    :short => [:y, :m, :d, :h, :min, :s, :sec_frac],
+    :long => [:year, :month, :day, :hour, :minute, :second, :second_fraction],
     :ruby => [:year, :mon, :day, :hour, :min, :sec, :sec_frac]
   }
   DATE_FORMATS[:default] = DATE_FORMATS[:ruby]
@@ -26,9 +26,9 @@ class Hash
     self[:mon] || self[:m] || self[:month] || self['mon'] || self['m'] || self['month'],
     self[:mday] || self[:d] || self[:day] || self['mday'] || self['d'] || self['day'],
     self[:hour] || self[:h] || self[:hr] || self['hour'] || self['h'] || self['hr'],
-    self[:min] || self['min'],
-    self[:sec] || self[:s] || self['sec'] || self['s'],
-    self[:sec_frac] || self['sec_frac']]
+    self[:min] || self[:minute] || self['min'] || self["minute"],
+    self[:sec] || self[:s] || self[:second] || self['sec'] || self['s'] || self["second"],
+    self[:sec_frac] || self[:second_fraction] || self['sec_frac'] || self['second_fraction']]
   end
 end
 
