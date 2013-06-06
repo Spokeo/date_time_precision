@@ -32,7 +32,7 @@ class DateTime < Date
       precision = self.precision(orig_args)
       time_args = normalize_new_args(orig_args)
       
-      dt = civil_org(*[time_args, args].flatten)
+      dt = civil_orig(*[time_args, args].flatten)
       dt.precision = precision
       dt.attributes_set(*orig_args)
       dt
