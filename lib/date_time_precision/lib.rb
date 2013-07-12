@@ -147,17 +147,25 @@ module DateTimePrecision
     [:to_date, :to_time, :to_datetime].each do |conversion_method|
       orig = :"orig_#{conversion_method}"
       if base.method_defined?(conversion_method) && !base.instance_methods(false).map(&:to_sym).include?(orig)
-        base.class_exec {
+        base.class_eval do
           alias_method orig, conversion_method
-          define_method(conversion_method) {
+          define_method(conversion_method) do
             d = send(orig)
             d.precision = [self.precision, d.class::MAX_PRECISION].min
             DATE_ATTRIBUTES.each do |attribute|
               d.instance_variable_set(:"@#{attribute}_set", self.instance_variable_get(:"@#{attribute}_set"))
             end
             d
-          }
-        }
+          end
+        end
+      else
+        # Define our own conversion methods by converting to hash first
+        require 'date_time_precision/format/hash'
+        base.class_eval do
+          define_method(conversion_method) do
+            to_h.send(conversion_method)
+          end
+        end
       end
     end
     
