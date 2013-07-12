@@ -123,14 +123,15 @@ Or install it yourself as:
 
     $ gem install date_time_precision
 
-## Wishlist
+## Wishlist / TO-DO
 
- - [x] Support Time::mktime
- - [x] Support Time::utc and Time#utc
- - [x] Support Time::local
- - [.] Support correct generation (done) and parsing (not done) of the ISO 8601 format, which supports partial dates
- - [ ] Support the various time zone methods (partially done)
- - [ ] Support easy string formatting based on precision
+ - [x] Time::mktime
+ - [x] Time::utc and Time#utc
+ - [x] Time::local
+ - [.] Correct generation and parsing of the ISO 8601 format, which supports partial dates and times
+ - [ ] The various time zone methods (partially done)
+ - [ ] Easy string formatting based on precision
+ - [ ] [ActiveSupport::TimeWithZone](http://apidock.com/rails/ActiveSupport/TimeWithZone)
 
 ## Contributing
 
