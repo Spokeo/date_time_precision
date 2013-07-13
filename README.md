@@ -108,7 +108,7 @@ modifications to how the core Date/Time classes work. (For example, by allowing 
 
 So far, the following gems are on the compatibility watch list:
 
- - [x] [ActiveSupport](https://github.com/rails/rails/tree/master/activesupport)
+ - [.] [ActiveSupport](https://github.com/rails/rails/tree/master/activesupport)
  - [x] [Virtus](https://github.com/solnic/virtus)
  - [x] [Coercible](https://github.com/solnic/coercible)
  - [ ] [Chronic](https://github.com/mojombo/chronic)
@@ -138,7 +138,7 @@ Or install it yourself as:
  - [x] Time::local
  - [.] Correct generation and parsing of the ISO 8601 format, which supports partial dates and times
  - [ ] The various time zone methods (partially done)
- - [ ] Easy string formatting based on precision
+ - [.] Easy string formatting based on precision
  - [ ] [ActiveSupport::TimeWithZone](http://apidock.com/rails/ActiveSupport/TimeWithZone)
 
 ## Contributing
