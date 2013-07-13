@@ -55,12 +55,9 @@ describe DateTimePrecision, 'Conversions' do
       Time.mktime(1800).to_s(:long).should == "1800"
       Time::mktime(1990, 8).to_s(:long).should == "August 1990"
 
-      if (RUBY_VERSION < '1.9')
-        Time::mktime(-50, 3, 9).to_s(:long).should == "March 09, -050"
-      else
-        Time::mktime(-50, 3, 9).to_s(:long).should == "March 09, -0050"
-      end
-      
+      # Every Ruby seems to have a different idea about how to format this exactly
+      Time::mktime(-50, 3, 9).to_s(:long).should match /^March 09, 0*\-0*50$/
+
       Time::mktime(2004, 7, 8, 10).to_s(:long).should == "July 08, 2004"
       Time::mktime(2004, 7, 8, 10, 5).to_s(:long).should == "July 08, 2004 10:05"
     end
