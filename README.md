@@ -52,6 +52,14 @@ The currently supported formats are Hash, JSON, and ISO 8601.
 Examples:
 
 ```ruby
+# Requires Active Support
+require 'date_time_precision/format/string'
+
+Date.new(2000, 5).to_s(:long)
+# => "May 2000"
+```
+
+```ruby
 require 'date_time_precision/format/hash'
 
 date = Date.new(2000, 10)
