@@ -14,6 +14,7 @@ Gem::Specification.new do |gem|
   gem.name          = "date_time_precision"
   gem.require_paths = ["lib"]
   gem.version       = DateTimePrecision::VERSION
+  gem.license       = 'MIT'
   
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec'
