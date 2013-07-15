@@ -57,6 +57,9 @@ require 'date_time_precision/format/string'
 
 Date.new(2000, 5).to_s(:long)
 # => "May 2000"
+
+Date.new(nil, 5, 10).to_s(:long)
+# => "May 10"
 ```
 
 ```ruby

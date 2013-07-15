@@ -45,21 +45,28 @@ describe DateTimePrecision, 'Conversions' do
       Date.new(2000).to_s(:long).should == "2000"
       Date.new(2000, 8).to_s(:long).should == "August 2000"
       Date.new(2000, 3, 9).to_s(:long).should == "March  9, 2000"
+      Date.new(nil, 5, 13).to_s(:long).should == "May 13"
+      Date.new(nil, 6).to_s(:long).should == "June"
 
       DateTime.new(1800).to_s(:long).should == "1800"
       DateTime.new(1990, 8).to_s(:long).should == "August 1990"
       DateTime.new(-50, 3, 9).to_s(:long).should == "March 09, -0050"
       DateTime.new(2004, 7, 8, 10).to_s(:long).should == "July 08, 2004"
       DateTime.new(2004, 7, 8, 10, 5).to_s(:long).should == "July 08, 2004 10:05"
+      DateTime.new(nil, 5, 13).to_s(:long).should == "May 13"
+      DateTime.new(nil, 6).to_s(:long).should == "June"
 
       Time.mktime(1800).to_s(:long).should == "1800"
-      Time::mktime(1990, 8).to_s(:long).should == "August 1990"
+      Time.mktime(1990, 8).to_s(:long).should == "August 1990"
 
       # Every Ruby seems to have a different idea about how to format this exactly
-      Time::mktime(-50, 3, 9).to_s(:long).should match /^March 09, 0*\-0*50$/
+      Time.mktime(-50, 3, 9).to_s(:long).should match /^March 09, 0*\-0*50$/
 
-      Time::mktime(2004, 7, 8, 10).to_s(:long).should == "July 08, 2004"
-      Time::mktime(2004, 7, 8, 10, 5).to_s(:long).should == "July 08, 2004 10:05"
+      Time.mktime(2004, 7, 8, 10).to_s(:long).should == "July 08, 2004"
+      Time.mktime(2004, 7, 8, 10, 5).to_s(:long).should == "July 08, 2004 10:05"
+
+      Time.mktime(nil, 5, 13).to_s(:long).should == "May 13"
+      Time.mktime(nil, 6).to_s(:long).should == "June"
     end
   end
 end
