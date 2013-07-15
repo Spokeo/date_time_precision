@@ -32,17 +32,29 @@ dt.year?     # => false
 dt.month?    # => true
 ```
 
-The gem adds the following instance methods to Date, Time, and/or DateTime:
+The gem adds the following (possibly missing) methods to Date, Time, and/or DateTime:
 
-*    precision
-*    precision=
-*    partial_match?
-*    year?
-*    month?
-*    day?
-*    hour?
-*    min?
-*    sec?
+### Instance Methods
+
+* precision
+* precision=
+* partial_match?
+* year?
+* month?
+* day?
+* hour?
+* min?
+* sec?
+* to_date
+* to_time
+* to_datetime
+* utc
+* local
+
+### Class Methods
+
+* utc
+* local
 
 ## Formats
 
@@ -93,6 +105,9 @@ require 'date_time_precision/format/iso8601'
 
 Date.new(2000, 5).iso8601
 # => "2000-05"
+
+Time.iso8601("2000-05").precision
+# => 2
 ```
 
 ## Ruby Compatibility
@@ -139,7 +154,7 @@ Or install it yourself as:
  - [x] Time::mktime
  - [x] Time::utc and Time#utc
  - [x] Time::local
- - [.] Correct generation and parsing of the ISO 8601 format, which supports partial dates and times
+ - [x] Correct generation and parsing of the ISO 8601 format, which supports partial dates and times
  - [ ] The various time zone methods (partially done)
  - [.] Easy string formatting based on precision
  - [ ] [ActiveSupport::TimeWithZone](http://apidock.com/rails/ActiveSupport/TimeWithZone)

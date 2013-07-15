@@ -48,6 +48,10 @@ class Date
       d.precision = precision
       d
     end
+
+    def utc(*args)
+      Time.utc(*args).to_datetime
+    end
   end
 
 =begin

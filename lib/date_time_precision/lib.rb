@@ -172,7 +172,8 @@ module DateTimePrecision
     # Extend with this module's class methods
     base.extend(ClassMethods)
     
-    # Define attribute query methods
+    # Define attribute query methods, including:
+    # year?, mon?, day?, hour?, min?, sec?, sec_frac?
     DATE_ATTRIBUTE_PRECISIONS.each do |attribute_name, precision|
       #next unless precision <= base::MAX_PRECISION
       

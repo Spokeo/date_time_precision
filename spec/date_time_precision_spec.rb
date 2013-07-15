@@ -84,9 +84,12 @@ describe DateTimePrecision do
       Time.mktime(2000).gmtime.precision.should == DateTimePrecision::YEAR
     end
     
-    it 'should track precision when creating a time in UTC' do
+    it 'should track precision when creating a date, time, or datetime in UTC' do
       Time.utc(1945, 10).precision.should == DateTimePrecision::MONTH
       Time.gm(1945, 10).precision.should == DateTimePrecision::MONTH
+
+      Date.utc(1945, 10).precision.should == DateTimePrecision::MONTH
+      DateTime.utc(1945, 10).precision.should == DateTimePrecision::MONTH
     end
     
     it 'should track precision when creating a time in the local timezone' do

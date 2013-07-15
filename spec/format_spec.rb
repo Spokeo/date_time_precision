@@ -12,31 +12,58 @@ describe DateTimePrecision do
       Time.mktime(*args)
     end
     
-    context 'ISO 8601' do
+    context 'ISO 8601 or XSD' do
       require 'date_time_precision/format/iso8601'
-      
-      it 'should convert a date to ISO 8601' do
-        date.iso8601.should == "1989-03-11"
-        Date.new(1990, 5).iso8601.should == "1990-05"
-        Date.new(1800).iso8601.should == "1800"
+
+      before(:all) do
+        @table = [
+          [[1989],                   "1989"],
+          [[1990, 5],                "1990-05"],
+          [[1800, 5, 6],             "1800-05-06"],
+          [[1990, 5, 2, 12],         "1990-05-02T12Z"],
+          [[1990, 5, 2, 12, 30],     "1990-05-02T12:30Z"],
+          [[1990, 5, 2, 12, 30, 45], "1990-05-02T12:30:45Z"]
+        ]
       end
-      
-      it 'should convert a datetime to ISO 8601' do
-        datetime.iso8601.should == "1989-03-11T08:30:15Z"
-        DateTime.new(1900).iso8601.should == "1900"
-        DateTime.new(1990, 5).iso8601.should == "1990-05"
-        DateTime.new(1990, 5, 2).iso8601.should == "1990-05-02"
-        DateTime.new(1990, 5, 2, 12).iso8601.should == "1990-05-02T12Z"
-        DateTime.new(1990, 5, 2, 12, 30).iso8601.should == "1990-05-02T12:30Z"
-      end
-      
-      it 'should convert a time to ISO 8601' do
-        Time.utc(1900).utc.iso8601.should == "1900"
-        Time.mktime(1990, 5).utc.iso8601.should == "1990-05"
-        Time.mktime(1990, 5, 2).utc.iso8601.should == "1990-05-02"
-        Time.utc(1990, 5, 2, 12).iso8601.should == "1990-05-02T12Z"
-        Time.utc(1990, 5, 2, 12, 30).utc.iso8601.should == "1990-05-02T12:30Z"
-        Time.utc(1990, 5, 2, 12, 30, 45).utc.iso8601.should == "1990-05-02T12:30:45Z"
+
+      [:iso8601, :xmlschema].each do |format_method|
+        it 'converts a date to and from ISO 8601' do
+          date.send(format_method).should == "1989-03-11"
+
+          @table.take(3).each do |args, format_string|
+            Date.new(*args).send(format_method).should == format_string
+
+            d = Date.send(format_method, format_string)
+            d.should == Date.new(*args)
+            d.precision.should == args.length
+          end
+        end
+        
+        it 'converts a datetime to and from ISO 8601' do
+          datetime.send(format_method).should == "1989-03-11T08:30:15Z"
+          
+          @table.each do |args, format_string|
+            DateTime.new(*args).send(format_method).should == format_string
+
+            d = DateTime.send(format_method, format_string)
+            constructor = args.length > 3 ? :utc : :local
+            d.should == DateTime.send(constructor, *args)
+            d.precision.should == args.length
+          end
+        end
+        
+        it 'converts a time to ISO 8601' do
+          Time.mktime(1900).send(format_method).should == "1900"
+
+          @table.each do |args, format_string|
+            Time.utc(*args).send(format_method).should == format_string
+
+            t = Time.send(format_method, format_string)
+            constructor = args.length > 3 ? :utc : :local
+            t.should == Time.send(constructor, *args)
+            t.precision.should == args.length
+          end
+        end
       end
     end
     

@@ -14,8 +14,9 @@ end
     end
 
     if method_defined?(:iso8601)
-      alias_method :iso8601_without_precision, :iso8601
+      alias_method :iso8601_original, :iso8601
     end
+
     def iso8601
       precision = self.precision || 0
       format = ""
@@ -47,6 +48,103 @@ end
       end
       
       output
+    end
+  end
+end
+
+Date.instance_eval do
+  if method_defined? :_xmlschema
+    def xmlschema(val)
+      date = _xmlschema(val).to_date
+      if date.precision == DateTimePrecision::NONE
+        raise ArgumentError.new("invalid date")
+      end
+      date
+    end
+  else
+    def xmlschema(val)
+      Time.xmlschema(val).to_date
+    end
+  end
+
+  if method_defined? :iso8601
+    alias_method :iso8601_original, :iso8601
+    def iso8601(val)
+      date = iso8601_original(val)
+    rescue
+      xmlschema(val)
+    end
+  else
+    def iso8601(val)
+      xmlschema(val)
+    end
+  end
+end
+
+Time.instance_eval do
+  def xmlschema(date)
+    if /\A\s*
+        (-?\d+)(?:-(\d\d)(?:-(\d\d)
+        (?:T
+        (\d\d)(?::(\d\d)(?::(\d\d)
+        (\.\d+)?
+        )?)?)?
+        (Z|[+-]\d\d:\d\d)?
+        )?)?
+        \s*\z/ix =~ date
+      year = $1 && $1.to_i
+      mon = $2 && $2.to_i
+      day = $3 && $3.to_i
+      hour = $4 && $4.to_i
+      min = $5 && $5.to_i
+      sec = $6 && $6.to_i
+      usec = 0
+      if $7
+        usec = Rational($7) * 1000000
+      end
+      if $8
+        zone = $8
+        year, mon, day, hour, min, sec =
+          apply_offset(year, mon, day, hour, min, sec, zone_offset(zone))
+        self.utc(year, mon, day, hour, min, sec, usec)
+      else
+        self.local(year, mon, day, hour, min, sec, usec)
+      end
+    else
+      raise ArgumentError.new("invalid date: #{date.inspect}")
+    end
+  end
+
+  def iso8601(date)
+    xmlschema(date)
+  end
+end
+
+DateTime.instance_eval do
+  if method_defined? :_xmlschema
+    def xmlschema(val)
+      date = _xmlschema(val).to_datetime
+      if date.precision == DateTimePrecision::NONE
+        raise ArgumentError.new("invalid date")
+      end
+      date
+    end
+  else
+    def xmlschema(val)
+      Time.xmlschema(val).to_datetime
+    end
+  end
+
+  if method_defined? :iso8601
+    alias_method :iso8601_original, :iso8601
+    def iso8601(val)
+      date = iso8601_original(val)
+    rescue
+      xmlschema(val)
+    end
+  else
+    def iso8601(val)
+      xmlschema(val)
     end
   end
 end

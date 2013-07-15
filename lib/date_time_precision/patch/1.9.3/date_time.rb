@@ -46,6 +46,18 @@ class DateTime < Date
       d.precision = precision
       d
     end
+
+    def utc(*args)
+      Time.utc(*args).to_datetime
+    end
+
+    def local(*args)
+      Time.local(*args).to_datetime
+    end
+  end
+
+  def utc
+    self.to_time.utc.to_datetime
   end
   
 end
