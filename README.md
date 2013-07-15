@@ -124,6 +124,8 @@ Sometimes other gems will use the Date/Time class in ways that don't preserve pr
 gems, any compatibility issues will most likely need to be patched within DateTimePrecision itself. This is because DateTimePrecision makes some
 modifications to how the core Date/Time classes work. (For example, by allowing nil values to be passed to constructors.)
 
+This gem should work with Rails/ActiveSupport 2, 3, and 4 (but perhaps missing some edge cases).
+
 So far, the following gems are on the compatibility watch list:
 
  - [.] [ActiveSupport](https://github.com/rails/rails/tree/master/activesupport)
