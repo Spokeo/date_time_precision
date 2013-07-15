@@ -169,9 +169,7 @@ module DateTimePrecision
         end
       end
 
-      base.class_eval do
-        public conversion_method
-      end
+      base.send :public, conversion_method
     end
     
     # Extend with this module's class methods
