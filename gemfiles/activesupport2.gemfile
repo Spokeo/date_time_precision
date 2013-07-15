@@ -3,7 +3,7 @@ source :rubygems
 gem 'rake'
 gem 'rspec'
 
-gem 'activesupport', '~> 2', :require => false
+gem 'activesupport', '~> 2.3', :require => false
 
 gem 'json'
 gem 'virtus', '0.5.4'
