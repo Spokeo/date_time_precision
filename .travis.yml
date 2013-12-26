@@ -6,6 +6,7 @@ rvm:
   - 1.9.2
   - 1.9.3
   - 2.0.0
+  - 2.1.0
   - jruby-18mode
   - jruby-19mode
 gemfile:
@@ -19,6 +20,8 @@ matrix:
     - rvm: 1.9.3
       gemfile: gemfiles/activesupport2.gemfile
     - rvm: 2.0.0
+      gemfile: gemfiles/activesupport2.gemfile
+    - rvm: 2.1.0
       gemfile: gemfiles/activesupport2.gemfile
     - rvm: jruby-19mode
       gemfile: gemfiles/activesupport2.gemfile
