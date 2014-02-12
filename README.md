@@ -134,6 +134,7 @@ So far, the following gems are on the compatibility watch list:
  - [ ] [Chronic](https://github.com/mojombo/chronic)
  - [ ] [Timeliness](https://github.com/adzap/timeliness)
  - [ ] [Timecop](https://github.com/travisjeffery/timecop)
+ - [ ] [delocalize](https://github.com/clemens/delocalize)
 
 If you know of any others, feel free to submit a pull request!
 
