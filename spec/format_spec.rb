@@ -8,7 +8,7 @@ describe DateTimePrecision do
     let(:datetime) { DateTime.new(1989, 3, 11, 8, 30, 15) }
     let(:time) do
       args = [1989, 3, 11, 8, 30, 15]
-      args << 1 if Time::MAX_PRECISION == DateTimePrecision::FRAC
+      args << 1 if DateTimePrecision::MICROSECONDS_SUPPORTED
       Time.mktime(*args)
     end
     
@@ -91,7 +91,7 @@ describe DateTimePrecision do
     
       let(:time_hash) do
         @time_hash = datetime_hash
-        @time_hash.merge!(:sec_frac => 1) if Time::MAX_PRECISION == DateTimePrecision::FRAC
+        @time_hash.merge!(:usec => 1) if DateTimePrecision::MICROSECONDS_SUPPORTED
         @time_hash
       end
     
@@ -150,14 +150,18 @@ describe DateTimePrecision do
         end
 
         it 'should convert Time to a short hash' do
-          time.to_h(:short).should == {
-            :y => 1989,
-            :m => 3,
-            :d => 11,
-            :h => 8,
-            :min => 30,
-            :s => 15
+          hash = {
+              :y => 1989,
+              :m => 3,
+              :d => 11,
+              :h => 8,
+              :min => 30,
+              :s => 15
           }
+
+          hash.merge!(:us => 1) if DateTimePrecision::MICROSECONDS_SUPPORTED
+
+          time.to_h(:short).should == hash
         end
       
         it 'should convert Time to a custom hash' do

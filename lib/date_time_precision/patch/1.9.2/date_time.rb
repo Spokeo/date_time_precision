@@ -1,7 +1,6 @@
 require 'date_time_precision/patch/1.8.7/date_time'
 
 class DateTime < Date
-
   def self.civil(y=nil, m=nil, d=nil, h=nil, min=nil, s=nil, of=0, sg=ITALY)
     time_args = [y,m,d,h,min,s]
     precision = self.precision(time_args)

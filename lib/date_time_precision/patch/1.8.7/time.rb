@@ -1,11 +1,7 @@
-require 'date_time_precision/lib'
+require 'date_time_precision/patch/common/time'
 require 'time'
 
 class Time
-  MAX_PRECISION = DateTimePrecision::SEC
-  
-  include DateTimePrecision
-
   class << self
     alias_method :mktime_orig, :mktime
     def mktime(*args)

@@ -1,11 +1,6 @@
-require 'date_time_precision/lib'
-require 'date'
+require 'date_time_precision/patch/common/date_time'
 
 class DateTime < Date
-  MAX_PRECISION = DateTimePrecision::SEC
-  
-  include DateTimePrecision
-
   class << self
     def parse(str='-4712-01-01T00:00:00+00:00', comp=false, sg=DateTime::ITALY)
       elem = _parse(str, comp)

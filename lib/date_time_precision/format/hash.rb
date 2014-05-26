@@ -2,9 +2,9 @@ require 'date_time_precision/lib'
 
 class Hash
   DATE_FORMATS = {
-    :short => [:y, :m, :d, :h, :min, :s, :sec_frac],
-    :long => [:year, :month, :day, :hour, :minute, :second, :second_fraction],
-    :ruby => [:year, :mon, :day, :hour, :min, :sec, :sec_frac]
+    :short => [:y, :m, :d, :h, :min, :s, :us],
+    :long => [:year, :month, :day, :hour, :minute, :second, :micro_seconds],
+    :ruby => [:year, :mon, :day, :hour, :min, :sec, :usec]
   }
   DATE_FORMATS[:default] = DATE_FORMATS[:ruby]
   
@@ -22,13 +22,16 @@ class Hash
   
   protected
   def date_time_args
-    [self[:year] || self[:y] || self[:yr] || self['year'] || self['y'] || self['yr'],
-    self[:mon] || self[:m] || self[:month] || self['mon'] || self['m'] || self['month'],
-    self[:mday] || self[:d] || self[:day] || self['mday'] || self['d'] || self['day'],
-    self[:hour] || self[:h] || self[:hr] || self['hour'] || self['h'] || self['hr'],
-    self[:min] || self[:minute] || self['min'] || self["minute"],
-    self[:sec] || self[:s] || self[:second] || self['sec'] || self['s'] || self["second"],
-    self[:sec_frac] || self[:second_fraction] || self['sec_frac'] || self['second_fraction']]
+    year = self[:year] || self[:y] || self[:yr] || self['year'] || self['y'] || self['yr']
+    month = self[:mon] || self[:m] || self[:month] || self['mon'] || self['m'] || self['month']
+    day = self[:mday] || self[:d] || self[:day] || self['mday'] || self['d'] || self['day']
+    hour = self[:hour] || self[:h] || self[:hr] || self['hour'] || self['h'] || self['hr']
+    minute = self[:min] || self[:minute] || self['min'] || self["minute"]
+    second = self[:sec] || self[:s] || self[:second] || self['sec'] || self['s'] || self["second"]
+    micro_second = self[:sec_frac] || self[:second_fraction] || self['sec_frac'] || self['second_fraction'] ||
+      self[:usec] || self[:micro_second] || self['usec'] || self['micro_second']
+
+    [year, month, day, hour, minute, second, micro_second]
   end
 end
 

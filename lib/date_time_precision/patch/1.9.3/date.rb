@@ -1,11 +1,6 @@
-require 'date_time_precision/lib'
-require 'date'
+require 'date_time_precision/patch/common/date'
 
 class Date
-  include DateTimePrecision
-
-  MAX_PRECISION = DateTimePrecision::DAY
-
   class << self
     alias_method :new_orig, :new
     def new(*args)

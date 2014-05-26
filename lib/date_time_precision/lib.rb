@@ -24,8 +24,10 @@ class Date
 end
 
 module DateTimePrecision
+  MICROSECONDS_SUPPORTED = !!Time.now.usec
+
   unless constants.include? "NONE"
-    FRAC  = 7
+    USEC = FRAC  = 7
     SEC   = 6
     MIN   = 5
     HOUR  = 4
@@ -44,7 +46,7 @@ module DateTimePrecision
       :hour,
       :min,
       :sec,
-      :sec_frac
+      :usec
     ]
     
     DATE_ATTRIBUTE_PRECISIONS = {
@@ -54,7 +56,7 @@ module DateTimePrecision
       :hour => HOUR,
       :min => MIN,
       :sec => SEC,
-      :sec_frac => FRAC
+      :usec => FRAC
     }
   end
 
@@ -75,7 +77,7 @@ module DateTimePrecision
       val.precision
     when Hash
       case
-      when val[:sec_frac], val[:subsec]
+      when val[:sec_frac], val[:subsec], val[:usec]
         FRAC
       when val[:sec]
         SEC
@@ -101,12 +103,13 @@ module DateTimePrecision
   
   def fragments
     frags = []
-    frags << self.year if self.year?
-    frags << self.month if self.month?
-    frags << self.day if self.day?
-    frags << self.hour if self.hour?
-    frags << self.min if self.min?
-    frags << self.sec if self.sec?
+    frags << year if year?
+    frags << month if month?
+    frags << day if day?
+    frags << hour if hour?
+    frags << min if min?
+    frags << sec if sec?
+    frags << usec if usec?
     frags
   end
   
@@ -179,7 +182,7 @@ module DateTimePrecision
     base.extend(ClassMethods)
     
     # Define attribute query methods, including:
-    # year?, mon?, day?, hour?, min?, sec?, sec_frac?
+    # year?, mon?, day?, hour?, min?, sec?, usec?
     DATE_ATTRIBUTE_PRECISIONS.each do |attribute_name, precision|
       #next unless precision <= base::MAX_PRECISION
       
@@ -201,16 +204,7 @@ module DateTimePrecision
       end
     EOM
     
-    base.class_eval do
-      if method_defined?(:usec)
-        alias_method :usec?, :sec_frac?
-        alias_method :sec_frac, :usec
-      end
-      
-      if method_defined?(:subsec)
-        alias_method :subsec?, :sec_frac?
-      end
-
+    base.instance_eval do
       alias_method :month?, :mon?
 
       alias_method :mday, :day

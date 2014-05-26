@@ -20,7 +20,7 @@ describe DateTimePrecision, 'Conversions' do
   it 'loses precision when converting from DateTime or Time to Date' do
     t = Time::parse('2000-1-1 00:00:00 EST') # => Fri Dec 31 21:00:00 -0800 1999
     t.precision.should == DateTimePrecision::SEC
-    t.to_datetime.precision.should == DateTime::MAX_PRECISION
+    t.to_datetime.precision.should == DateTimePrecision::SEC
     t.to_date.precision.should == DateTimePrecision::DAY
   end
   

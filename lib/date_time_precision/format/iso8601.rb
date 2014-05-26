@@ -9,15 +9,16 @@ end
       alias_method :xmlschema_without_precision, :xmlschema
     end
     
-    def xmlschema
-      iso8601
+    def xmlschema(fraction_digits=0)
+      iso8601(fraction_digits)
     end
 
     if method_defined?(:iso8601)
       alias_method :iso8601_original, :iso8601
     end
 
-    def iso8601
+    def iso8601(fraction_digits=0)
+      fraction_digits = fraction_digits.to_i
       precision = self.precision || 0
       format = ""
       if precision > DateTimePrecision::NONE
@@ -32,8 +33,12 @@ end
       output = sprintf(format, year < 0 ? 5 : 4, *self.fragments)
 
       # Fractional seconds
-      if sec_frac? && sec_frac > 0
-        output << '.' + sprintf('%0*d', sec_frac, (subsec * 10**sec_frac).floor)
+      if fraction_digits > 0 && usec? && usec > 0
+        if fraction_digits <= 6
+          output << '.' + sprintf('%06d', usec)[0, fraction_digits]
+        else
+          output << '.' + sprintf('%06d', usec) + '0' * (fraction_digits - 6)
+        end
       end
 
       # Timezone
@@ -98,7 +103,7 @@ Time.instance_eval do
       hour = $4 && $4.to_i
       min = $5 && $5.to_i
       sec = $6 && $6.to_i
-      usec = 0
+      usec = nil
       if $7
         usec = Rational($7) * 1000000
       end
