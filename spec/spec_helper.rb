@@ -1,6 +1,7 @@
 require 'rubygems'
-require 'bundler'
-Bundler.setup
+require 'bundler/setup'
+
+require 'pry'
 
 Dir['./spec/support/**/*.rb'].map {|f| require f}
 
