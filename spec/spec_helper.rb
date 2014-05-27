@@ -1,7 +1,10 @@
 require 'rubygems'
 require 'bundler/setup'
 
-require 'pry'
+begin
+  require 'pry'
+rescue LoadError
+end
 
 Dir['./spec/support/**/*.rb'].map {|f| require f}
 
