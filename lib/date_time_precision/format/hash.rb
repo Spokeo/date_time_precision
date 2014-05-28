@@ -13,7 +13,7 @@ class Hash
   end
   
   def to_datetime
-    DateTime.new(*date_time_args.take(DateTime::MAX_PRECISION))
+    DateTime.new(*date_time_args.take(DateTime::SEC))
   end
   
   def to_date
