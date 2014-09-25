@@ -2,7 +2,6 @@
 
 source "https://rubygems.org"
 
-gem "pry"
 gem "activesupport", "~> 3.2", :require => false
 
 gemspec :path => "../"
