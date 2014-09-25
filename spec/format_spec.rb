@@ -178,9 +178,9 @@ describe DateTimePrecision do
         end
         
         it 'should convert to the default hash format' do
-          ::Hash::DATE_FORMATS[:default] = Hash::DATE_FORMATS[:short]
+          ::Hash::DATE_FORMATS[:default] = ::Hash::DATE_FORMATS[:short]
           expect(date.to_h(:short)).to eq(short_date_hash)
-          ::Hash::DATE_FORMATS[:default] = Hash::DATE_FORMATS[:ruby]
+          ::Hash::DATE_FORMATS[:default] = ::Hash::DATE_FORMATS[:ruby]
         end
         
         it 'should only include fields that were set' do
