@@ -32,29 +32,69 @@ describe DateTimePrecision do
       context 'when coercing a hash to a Date' do
         subject { model.date }
         
-        it { should be_a Date }
-        its(:year) { should == 1990 }
-        its(:precision) { should == DateTimePrecision::YEAR }
+        it { is_expected.to be_a Date }
+
+        describe '#year' do
+          subject { super().year }
+          it { is_expected.to eq(1990) }
+        end
+
+        describe '#precision' do
+          subject { super().precision }
+          it { is_expected.to eq(DateTimePrecision::YEAR) }
+        end
       end
       
       context 'when coercing a hash to a DateTime' do
         subject { model.datetime }
         
-        it { should be_a DateTime }
-        its(:year) { should == 1800 }
-        its(:month) { should == 2 }
-        its(:precision) { should == DateTimePrecision::MONTH }
+        it { is_expected.to be_a DateTime }
+
+        describe '#year' do
+          subject { super().year }
+          it { is_expected.to eq(1800) }
+        end
+
+        describe '#month' do
+          subject { super().month }
+          it { is_expected.to eq(2) }
+        end
+
+        describe '#precision' do
+          subject { super().precision }
+          it { is_expected.to eq(DateTimePrecision::MONTH) }
+        end
       end
       
       context 'when coercing a hash to a Time' do
         subject { model.time }
         
-        it { should be_a Time }
-        its(:year) { should == 1950 }
-        its(:month) { should == 5 }
-        its(:day) { should == 19 }
-        its(:hour) { should == 5 }
-        its(:precision) { should == DateTimePrecision::HOUR }
+        it { is_expected.to be_a Time }
+
+        describe '#year' do
+          subject { super().year }
+          it { is_expected.to eq(1950) }
+        end
+
+        describe '#month' do
+          subject { super().month }
+          it { is_expected.to eq(5) }
+        end
+
+        describe '#day' do
+          subject { super().day }
+          it { is_expected.to eq(19) }
+        end
+
+        describe '#hour' do
+          subject { super().hour }
+          it { is_expected.to eq(5) }
+        end
+
+        describe '#precision' do
+          subject { super().precision }
+          it { is_expected.to eq(DateTimePrecision::HOUR) }
+        end
       end
     end
     
@@ -66,29 +106,69 @@ describe DateTimePrecision do
       context 'when coercing a hash to a Date' do
         subject { coercer.to_date(date_hash) }
         
-        it { should be_a Date }
-        its(:year) { should == 1990 }
-        its(:precision) { should == DateTimePrecision::YEAR }
+        it { is_expected.to be_a Date }
+
+        describe '#year' do
+          subject { super().year }
+          it { is_expected.to eq(1990) }
+        end
+
+        describe '#precision' do
+          subject { super().precision }
+          it { is_expected.to eq(DateTimePrecision::YEAR) }
+        end
       end
       
       context 'when coercing a hash to a DateTime' do
         subject { coercer.to_datetime(datetime_hash) }
         
-        it { should be_a DateTime }
-        its(:year) { should == 1800 }
-        its(:month) { should == 2 }
-        its(:precision) { should == DateTimePrecision::MONTH }
+        it { is_expected.to be_a DateTime }
+
+        describe '#year' do
+          subject { super().year }
+          it { is_expected.to eq(1800) }
+        end
+
+        describe '#month' do
+          subject { super().month }
+          it { is_expected.to eq(2) }
+        end
+
+        describe '#precision' do
+          subject { super().precision }
+          it { is_expected.to eq(DateTimePrecision::MONTH) }
+        end
       end
       
       context 'when coercing a hash to a Time' do
         subject { coercer.to_time(time_hash) }
         
-        it { should be_a Time }
-        its(:year) { should == 1950 }
-        its(:month) { should == 5 }
-        its(:day) { should == 19 }
-        its(:hour) { should == 5 }
-        its(:precision) { should == DateTimePrecision::HOUR }
+        it { is_expected.to be_a Time }
+
+        describe '#year' do
+          subject { super().year }
+          it { is_expected.to eq(1950) }
+        end
+
+        describe '#month' do
+          subject { super().month }
+          it { is_expected.to eq(5) }
+        end
+
+        describe '#day' do
+          subject { super().day }
+          it { is_expected.to eq(19) }
+        end
+
+        describe '#hour' do
+          subject { super().hour }
+          it { is_expected.to eq(5) }
+        end
+
+        describe '#precision' do
+          subject { super().precision }
+          it { is_expected.to eq(DateTimePrecision::HOUR) }
+        end
       end
     end
   end

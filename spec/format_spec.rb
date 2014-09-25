@@ -28,40 +28,40 @@ describe DateTimePrecision do
 
       [:iso8601, :xmlschema].each do |format_method|
         it 'converts a date to and from ISO 8601' do
-          date.send(format_method).should == "1989-03-11"
+          expect(date.send(format_method)).to eq("1989-03-11")
 
           @table.take(3).each do |args, format_string|
-            Date.new(*args).send(format_method).should == format_string
+            expect(Date.new(*args).send(format_method)).to eq(format_string)
 
             d = Date.send(format_method, format_string)
-            d.should == Date.new(*args)
-            d.precision.should == args.length
+            expect(d).to eq(Date.new(*args))
+            expect(d.precision).to eq(args.length)
           end
         end
         
         it 'converts a datetime to and from ISO 8601' do
-          datetime.send(format_method).should == "1989-03-11T08:30:15Z"
+          expect(datetime.send(format_method)).to eq("1989-03-11T08:30:15Z")
           
           @table.each do |args, format_string|
-            DateTime.new(*args).send(format_method).should == format_string
+            expect(DateTime.new(*args).send(format_method)).to eq(format_string)
 
             d = DateTime.send(format_method, format_string)
             constructor = args.length > 3 ? :utc : :local
-            d.should == DateTime.send(constructor, *args)
-            d.precision.should == args.length
+            expect(d).to eq(DateTime.send(constructor, *args))
+            expect(d.precision).to eq(args.length)
           end
         end
         
         it 'converts a time to ISO 8601' do
-          Time.mktime(1900).send(format_method).should == "1900"
+          expect(Time.mktime(1900).send(format_method)).to eq("1900")
 
           @table.each do |args, format_string|
-            Time.utc(*args).send(format_method).should == format_string
+            expect(Time.utc(*args).send(format_method)).to eq(format_string)
 
             t = Time.send(format_method, format_string)
             constructor = args.length > 3 ? :utc : :local
-            t.should == Time.send(constructor, *args)
-            t.precision.should == args.length
+            expect(t).to eq(Time.send(constructor, *args))
+            expect(t.precision).to eq(args.length)
           end
         end
       end
@@ -97,19 +97,19 @@ describe DateTimePrecision do
     
       context 'Converting to hash' do
         it 'should convert Date to a hash' do
-          date.to_h.should == date_hash
+          expect(date.to_h).to eq(date_hash)
         end
       
         it 'should convert DateTime to a hash' do
-          datetime.to_h.should == datetime_hash
+          expect(datetime.to_h).to eq(datetime_hash)
         end
       
         it 'should convert Time to a hash' do
-          time.to_h.should == time_hash
+          expect(time.to_h).to eq(time_hash)
         end
         
         it 'should skip year if not included' do
-          Date.new(nil, 8, 10).to_h.should == {:mon => 8, :day => 10}
+          expect(Date.new(nil, 8, 10).to_h).to eq({:mon => 8, :day => 10})
         end
       end
       
@@ -131,22 +131,22 @@ describe DateTimePrecision do
         end
         
         it 'should convert Date to a short hash' do
-          date.to_h(:short).should == short_date_hash
+          expect(date.to_h(:short)).to eq(short_date_hash)
         end
 
         it 'should convert Date to a long hash' do
-          date.to_h(:long).should == long_date_hash
+          expect(date.to_h(:long)).to eq(long_date_hash)
         end
       
         it 'should convert DateTime to a long hash' do
-          datetime.to_h(:long).should == {
+          expect(datetime.to_h(:long)).to eq({
             :year => 1989,
             :month => 3,
             :day => 11,
             :hour => 8,
             :minute => 30,
             :second => 15
-          }
+          })
         end
 
         it 'should convert Time to a short hash' do
@@ -161,75 +161,75 @@ describe DateTimePrecision do
 
           hash.merge!(:us => 1) if DateTimePrecision::MICROSECONDS_SUPPORTED
 
-          time.to_h(:short).should == hash
+          expect(time.to_h(:short)).to eq(hash)
         end
       
         it 'should convert Time to a custom hash' do
           Hash::DATE_FORMATS[:custom] = [:year, :mon, :d, :h, :min, :s]
           
-          time.to_h(:custom).should == {
+          expect(time.to_h(:custom)).to eq({
             :year => 1989,
             :mon => 3,
             :d => 11,
             :h => 8,
             :min => 30,
             :s => 15,
-          }
+          })
         end
         
         it 'should convert to the default hash format' do
           Hash::DATE_FORMATS[:default] = Hash::DATE_FORMATS[:short]
-          date.to_h(:short).should == short_date_hash
+          expect(date.to_h(:short)).to eq(short_date_hash)
           Hash::DATE_FORMATS[:default] = Hash::DATE_FORMATS[:ruby]
         end
         
         it 'should only include fields that were set' do
-          Date.new(nil, 3, 8).to_h.should == {:mon => 3, :day => 8}
-          DateTime.new(nil, 5, 6, nil, 7).to_h.should == {:mon => 5, :day => 6, :min => 7}
-          Time.mktime(nil, 1, nil, 9, nil, 10).to_h.should == {:mon => 1, :hour => 9, :sec => 10}
+          expect(Date.new(nil, 3, 8).to_h).to eq({:mon => 3, :day => 8})
+          expect(DateTime.new(nil, 5, 6, nil, 7).to_h).to eq({:mon => 5, :day => 6, :min => 7})
+          expect(Time.mktime(nil, 1, nil, 9, nil, 10).to_h).to eq({:mon => 1, :hour => 9, :sec => 10})
         end
       end
   
       context 'Converting from hash' do
         it 'converts a hash to a Date' do
-          date_hash.to_date.should == date
+          expect(date_hash.to_date).to eq(date)
         end
     
         it 'converts a hash to a DateTime' do
-          datetime_hash.to_datetime.should == datetime
+          expect(datetime_hash.to_datetime).to eq(datetime)
         end
     
         it 'converts a hash to a Time' do
-          time_hash.to_time.should == time
+          expect(time_hash.to_time).to eq(time)
         end
       
         it 'accepts flexible keys' do
-          {
+          expect({
             :y => 1989,
             :m => 3,
             :d => 11
-          }.to_date.should == date
+          }.to_date).to eq(date)
         
-          {
+          expect({
             :year => 1989,
             :month => 3,
             :day => 11
-          }.to_date.should == date
+          }.to_date).to eq(date)
         end
         
         [:date, :datetime, :time].each do |klass|
           it "accepts month and day without year when converting to a #{klass}" do
             date = { :month => 5, :day => 18, :min => 48 }.send("to_#{klass}")
-            date.year?.should be_false
-            date.month?.should be_true
-            date.month.should == 5
-            date.day?.should be_true
-            date.day.should == 18
-            date.hour?.should be_false
+            expect(date.year?).to be_falsey
+            expect(date.month?).to be_truthy
+            expect(date.month).to eq(5)
+            expect(date.day?).to be_truthy
+            expect(date.day).to eq(18)
+            expect(date.hour?).to be_falsey
             
             unless klass == :date
-              date.min?.should be_true
-              date.min.should == 48
+              expect(date.min?).to be_truthy
+              expect(date.min).to eq(48)
             end
           end
         end
@@ -241,18 +241,18 @@ describe DateTimePrecision do
       require 'json'
     
       it 'should convert a date to a JSON hash' do
-        date.as_json.should == date.to_h
-        date.to_json.should == date.to_h.to_json
+        expect(date.as_json).to eq(date.to_h)
+        expect(date.to_json).to eq(date.to_h.to_json)
       end
     
       it 'should convert a datetime to a JSON hash' do
-        datetime.as_json.should == datetime.to_h
-        datetime.to_json.should == datetime.to_h.to_json
+        expect(datetime.as_json).to eq(datetime.to_h)
+        expect(datetime.to_json).to eq(datetime.to_h.to_json)
       end
       
       it 'should convert a time to a JSON hash' do
-        time.as_json.should == time.to_h
-        time.to_json.should == time.to_h.to_json
+        expect(time.as_json).to eq(time.to_h)
+        expect(time.to_json).to eq(time.to_h.to_json)
       end
     end
     
