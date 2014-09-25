@@ -165,7 +165,7 @@ describe DateTimePrecision do
         end
       
         it 'should convert Time to a custom hash' do
-          Hash::DATE_FORMATS[:custom] = [:year, :mon, :d, :h, :min, :s]
+          ::Hash::DATE_FORMATS[:custom] = [:year, :mon, :d, :h, :min, :s]
           
           expect(time.to_h(:custom)).to eq({
             :year => 1989,
@@ -178,9 +178,9 @@ describe DateTimePrecision do
         end
         
         it 'should convert to the default hash format' do
-          Hash::DATE_FORMATS[:default] = Hash::DATE_FORMATS[:short]
+          ::Hash::DATE_FORMATS[:default] = Hash::DATE_FORMATS[:short]
           expect(date.to_h(:short)).to eq(short_date_hash)
-          Hash::DATE_FORMATS[:default] = Hash::DATE_FORMATS[:ruby]
+          ::Hash::DATE_FORMATS[:default] = Hash::DATE_FORMATS[:ruby]
         end
         
         it 'should only include fields that were set' do
