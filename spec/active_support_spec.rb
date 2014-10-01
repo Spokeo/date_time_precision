@@ -68,5 +68,31 @@ describe DateTimePrecision, 'Conversions' do
       expect(Time.mktime(nil, 5, 13).to_s(:long)).to eq("May 13")
       expect(Time.mktime(nil, 6).to_s(:long)).to eq("June")
     end
+
+    it 'takes precision into account for decade and century' do
+      decade_date = Date.new(1853)
+      decade_date.precision = DateTimePrecision::DECADE
+      expect(decade_date.to_s(:long)).to eq("1850s")
+
+      century_date = Date.new(1853)
+      century_date.precision = DateTimePrecision::CENTURY
+      expect(century_date.to_s(:long)).to eq("1800s")
+
+      decade_date_time = DateTime.new(1853)
+      decade_date_time.precision = DateTimePrecision::DECADE
+      expect(decade_date_time.to_s(:long)).to eq("1850s")
+
+      century_date_time = DateTime.new(1853)
+      century_date_time.precision = DateTimePrecision::CENTURY
+      expect(century_date_time.to_s(:long)).to eq("1800s")
+
+      decade_time = Time.mktime(1853)
+      decade_time.precision = DateTimePrecision::DECADE
+      expect(decade_time.to_s(:long)).to eq("1850s")
+
+      century_time = Time.mktime(1853)
+      century_time.precision = DateTimePrecision::CENTURY
+      expect(century_time.to_s(:long)).to eq("1800s")
+    end
   end
 end

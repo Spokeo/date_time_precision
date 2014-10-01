@@ -28,13 +28,15 @@ module DateTimePrecision
 
   unless constants.include? "NONE"
     USEC = FRAC  = 7
-    SEC   = 6
-    MIN   = 5
-    HOUR  = 4
-    DAY   = 3
-    MONTH = 2
-    YEAR  = 1
-    NONE  = 0
+    SEC     = 6
+    MIN     = 5
+    HOUR    = 4
+    DAY     = 3
+    MONTH   = 2
+    YEAR    = 1
+    DECADE  = 0.5
+    CENTURY = 0.25
+    NONE    = 0
   
     # Default values for y,m,d,h,m,s,frac
     NEW_DEFAULTS = [-4712,1,1,0,0,0,0]
@@ -50,6 +52,8 @@ module DateTimePrecision
     ]
     
     DATE_ATTRIBUTE_PRECISIONS = {
+      :century => CENTURY,
+      :decade => DECADE,
       :year => YEAR,
       :mon => MONTH,
       :day => DAY,
@@ -91,6 +95,10 @@ module DateTimePrecision
         MONTH
       when val[:year], val[:y]
         YEAR
+      when val[:decade]
+        DECADE
+      when val[:century]
+        CENTURY
       else
         NONE
       end
@@ -121,6 +129,30 @@ module DateTimePrecision
   def normalize_new_args(args)
     self.class.normalize_new_args(args)
   end
+
+  def decade
+    original_year = (self.year > 0) ? self.year : self.year + 10
+    year_as_a_number = (original_year - original_year % 10)
+    method = self.class.respond_to?(:mktime) ? :mktime : :new
+    self.class.send(method, year_as_a_number)
+  end
+
+  def decade?
+    return !year_set.nil? ? year_set : (self.precision >= DateTimePrecision::DECADE)
+  end
+
+  def century
+    original_year = (self.year > 0) ? self.year : self.year + 100
+    year_as_a_number = (original_year - original_year % 100)
+    method = self.class.respond_to?(:mktime) ? :mktime : :new
+    self.class.send(method, year_as_a_number)
+  end
+
+  def century?
+    return !year_set.nil? ? year_set : (self.precision >= DateTimePrecision::CENTURY)
+  end
+
+
   protected :normalize_new_args
   
   module ClassMethods
@@ -197,7 +229,7 @@ module DateTimePrecision
         protected :#{attribute_name}_set=
       EOM
     end
-    
+
     base.class_eval <<-EOM, __FILE__, __LINE__
       def attributes_set(*vals)
         #{DATE_ATTRIBUTES.map{|attribute| "@#{attribute}_set"}.join(', ')} = *(vals.flatten.map{|v| !!v})
