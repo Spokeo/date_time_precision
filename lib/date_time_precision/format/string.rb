@@ -1,4 +1,5 @@
 require 'active_support/core_ext/date/conversions'
+require 'active_support/core_ext/time/conversions'
 
 Date::DATE_FORMATS[:long] = lambda do |date|
   case
