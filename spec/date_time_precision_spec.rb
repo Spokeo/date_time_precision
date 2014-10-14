@@ -186,14 +186,14 @@ describe DateTimePrecision do
       decade_time = Time.mktime(1853)
       decade_time.precision = DateTimePrecision::DECADE
       
-      expect(full_date.decade).to eq(Date.new(1850))
-      expect(full_date.century).to eq(Date.new(1800))
+      expect(full_date.decade).to eq(1850)
+      expect(full_date.century).to eq(1800)
 
-      expect(decade_time.decade).to eq(Time.mktime(1850))
-      expect(decade_time.century).to eq(Time.mktime(1800))
+      expect(decade_time.decade).to eq(1850)
+      expect(decade_time.century).to eq(1800)
 
-      expect(century_date_time.decade).to eq(DateTime.new(1850))
-      expect(century_date_time.century).to eq(DateTime.new(1800))
+      expect(century_date_time.decade).to eq(1850)
+      expect(century_date_time.century).to eq(1800)
 
       expect(no_date.decade?).to be_falsey
       expect(full_date.decade?).to be_truthy
@@ -207,8 +207,8 @@ describe DateTimePrecision do
     end
     it 'properly handles negative years' do
       date_bce = Date.new(-531, 10, 5)
-      expect(date_bce.decade).to eq(Date.new(-530))
-      expect(date_bce.century).to eq(Date.new(-500))
+      expect(date_bce.decade).to eq(-530)
+      expect(date_bce.century).to eq(-500)
     end
 
   end
