@@ -220,15 +220,15 @@ describe DateTimePrecision do
         [:date, :datetime, :time].each do |klass|
           it "accepts month and day without year when converting to a #{klass}" do
             date = { :month => 5, :day => 18, :min => 48 }.send("to_#{klass}")
-            expect(date.year?).to be_falsey
-            expect(date.month?).to be_truthy
+            expect(date.year?).to be false
+            expect(date.month?).to be true
             expect(date.month).to eq(5)
-            expect(date.day?).to be_truthy
+            expect(date.day?).to be true
             expect(date.day).to eq(18)
-            expect(date.hour?).to be_falsey
+            expect(date.hour?).to be false
             
             unless klass == :date
-              expect(date.min?).to be_truthy
+              expect(date.min?).to be true
               expect(date.min).to eq(48)
             end
           end

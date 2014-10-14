@@ -6,11 +6,11 @@ describe DateTimePrecision do
     it 'has no precision for unspecified date' do
       d = Date.new
       expect(d.precision).to eq(DateTimePrecision::NONE)
-      expect(d.year?).to be_falsey
+      expect(d.year?).to be false
     
       dt = DateTime.new
       expect(dt.precision).to eq(DateTimePrecision::NONE)
-      expect(dt.year?).to be_falsey
+      expect(dt.year?).to be false
     end
   
     it 'has no precision for nil values' do
@@ -20,45 +20,45 @@ describe DateTimePrecision do
     it 'has year precision when only year is supplied' do
       d = Date.new(1982)
       expect(d.precision).to eq(DateTimePrecision::YEAR)
-      expect(d.year?).to be_truthy
-      expect(d.month?).to be_falsey
-      expect(d.day?).to be_falsey
+      expect(d.year?).to be true
+      expect(d.month?).to be false
+      expect(d.day?).to be false
     end
   
     it 'has month precision when year and month are supplied' do
       d = Date.new(1982, 11)
       expect(d.precision).to eq(DateTimePrecision::MONTH)
-      expect(d.year?).to be_truthy
-      expect(d.month?).to be_truthy
-      expect(d.day?).to be_falsey
+      expect(d.year?).to be true
+      expect(d.month?).to be true
+      expect(d.day?).to be false
     end
   
     it 'has day precision when year, month, and day are passed in' do
       dt = DateTime.new(1987,10,19)
       expect(dt.precision).to eq(DateTimePrecision::DAY)
-      expect(dt.year?).to be_truthy
-      expect(dt.month?).to be_truthy
-      expect(dt.day?).to be_truthy
-      expect(dt.hour?).to be_falsey
+      expect(dt.year?).to be true
+      expect(dt.month?).to be true
+      expect(dt.day?).to be true
+      expect(dt.hour?).to be false
     end
   
     it 'has hour precision' do
       dt = DateTime.new(1970, 1, 2, 3)
       expect(dt.precision).to eq(DateTimePrecision::HOUR)
-      expect(dt.year?).to be_truthy
-      expect(dt.month?).to be_truthy
-      expect(dt.day?).to be_truthy
-      expect(dt.hour?).to be_truthy
-      expect(dt.min?).to be_falsey
+      expect(dt.year?).to be true
+      expect(dt.month?).to be true
+      expect(dt.day?).to be true
+      expect(dt.hour?).to be true
+      expect(dt.min?).to be false
     end
     
     it 'tracks which attributes were explicitly set separately from precision' do
       [Date.new(nil, 11, 12), DateTime.new(nil, 10, 11, nil), Time.mktime(nil, 12, 13, nil, 14)].each do |d|
-        expect(d.year?).to be_falsey
-        expect(d.month?).to be_truthy
-        expect(d.day?).to be_truthy
-        expect(d.hour?).to be_falsey
-        expect(d.min?).to be_truthy if d.is_a? Time
+        expect(d.year?).to be false
+        expect(d.month?).to be true
+        expect(d.day?).to be true
+        expect(d.hour?).to be false
+        expect(d.min?).to be true if d.is_a? Time
         expect(d.precision).to eq(DateTimePrecision::NONE)
       end
     end
@@ -172,8 +172,8 @@ describe DateTimePrecision do
     it 'should match when differing only in day precision' do
       d1 = Date.new(2001,3,2)
       d2 = Date.new(2001,3)
-      expect(d1.partial_match?(d2)).to be_truthy
-      expect(d2.partial_match?(d1)).to be_truthy
+      expect(d1.partial_match?(d2)).to be true
+      expect(d2.partial_match?(d1)).to be true
     end
   end
 
