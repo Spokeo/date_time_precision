@@ -135,19 +135,10 @@ module DateTimePrecision
     (year_with_bce_adjustment - year_with_bce_adjustment % 10)
   end
 
-  def decade?
-    return !year_set.nil? ? year_set : (self.precision >= DateTimePrecision::DECADE)
-  end
-
   def century
     year_with_bce_adjustment = (self.year > 0) ? self.year : self.year + 100
     year_with_bce_adjustment - year_with_bce_adjustment % 100
   end
-
-  def century?
-    return !year_set.nil? ? year_set : (self.precision >= DateTimePrecision::CENTURY)
-  end
-
 
   protected :normalize_new_args
   
