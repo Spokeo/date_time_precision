@@ -195,15 +195,15 @@ describe DateTimePrecision do
       expect(century_date_time.decade).to eq(1850)
       expect(century_date_time.century).to eq(1800)
 
-      expect(no_date.decade?).to be_falsey
-      expect(full_date.decade?).to be_truthy
-      expect(decade_time.decade?).to be_truthy
-      expect(century_date_time.decade?).to be_falsey
+      expect(no_date.decade?).to eq(false)
+      expect(full_date.decade?).to eq(true)
+      expect(decade_time.decade?).to eq(true)
+      expect(century_date_time.decade?).to eq(false)
 
-      expect(no_date.century?).to be_falsey
-      expect(full_date.century?).to be_truthy
-      expect(decade_time.century?).to be_truthy
-      expect(century_date_time.century?).to be_truthy
+      expect(no_date.century?).to eq(false)
+      expect(full_date.century?).to eq(true)
+      expect(decade_time.century?).to eq(true)
+      expect(century_date_time.century?).to eq(true)
     end
     it 'properly handles negative years' do
       date_bce = Date.new(-531, 10, 5)
