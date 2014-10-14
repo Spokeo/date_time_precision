@@ -131,10 +131,8 @@ module DateTimePrecision
   end
 
   def decade
-    original_year = (self.year > 0) ? self.year : self.year + 10
-    year_as_a_number = (original_year - original_year % 10)
-    method = self.class.respond_to?(:mktime) ? :mktime : :new
-    self.class.send(method, year_as_a_number)
+    year_with_bce_adjustment = (self.year > 0) ? self.year : self.year + 10
+    (year_with_bce_adjustment - year_with_bce_adjustment % 10)
   end
 
   def decade?
@@ -142,10 +140,8 @@ module DateTimePrecision
   end
 
   def century
-    original_year = (self.year > 0) ? self.year : self.year + 100
-    year_as_a_number = (original_year - original_year % 100)
-    method = self.class.respond_to?(:mktime) ? :mktime : :new
-    self.class.send(method, year_as_a_number)
+    year_with_bce_adjustment = (self.year > 0) ? self.year : self.year + 100
+    year_with_bce_adjustment - year_with_bce_adjustment % 100
   end
 
   def century?
