@@ -54,6 +54,8 @@ describe DateTimePrecision do
     
     it 'tracks which attributes were explicitly set separately from precision' do
       [Date.new(nil, 11, 12), DateTime.new(nil, 10, 11, nil), Time.mktime(nil, 12, 13, nil, 14)].each do |d|
+        expect(d.decade?).to be false
+        expect(d.century?).to be false
         expect(d.year?).to be false
         expect(d.month?).to be true
         expect(d.day?).to be true
@@ -177,4 +179,39 @@ describe DateTimePrecision do
     end
   end
 
+  context 'Decades and Centuries' do
+    it 'should have the proper precision when outputting decades or centuries' do
+      no_date = Date.new
+      full_date = Date.new(1853,10,10)
+      century_date_time = DateTime.new(1853)
+      century_date_time.precision = DateTimePrecision::CENTURY
+      decade_time = Time.mktime(1853)
+      decade_time.precision = DateTimePrecision::DECADE
+      
+      expect(full_date.decade).to eq(1850)
+      expect(full_date.century).to eq(1800)
+
+      expect(decade_time.decade).to eq(1850)
+      expect(decade_time.century).to eq(1800)
+
+      expect(century_date_time.decade).to eq(1850)
+      expect(century_date_time.century).to eq(1800)
+
+      expect(no_date.decade?).to be false
+      expect(full_date.decade?).to be true
+      expect(decade_time.decade?).to be true
+      expect(century_date_time.decade?).to be false
+
+      expect(no_date.century?).to be false
+      expect(full_date.century?).to be true
+      expect(decade_time.century?).to be true
+      expect(century_date_time.century?).to be true
+    end
+    it 'properly handles negative years' do
+      date_bce = Date.new(-531, 10, 5)
+      expect(date_bce.decade).to eq(-530)
+      expect(date_bce.century).to eq(-500)
+    end
+
+  end
 end

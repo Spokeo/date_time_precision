@@ -28,13 +28,15 @@ module DateTimePrecision
 
   unless constants.include? "NONE"
     USEC = FRAC  = 7
-    SEC   = 6
-    MIN   = 5
-    HOUR  = 4
-    DAY   = 3
-    MONTH = 2
-    YEAR  = 1
-    NONE  = 0
+    SEC     = 6
+    MIN     = 5
+    HOUR    = 4
+    DAY     = 3
+    MONTH   = 2
+    YEAR    = 1
+    DECADE  = 0.5
+    CENTURY = 0.25
+    NONE    = 0
   
     # Default values for y,m,d,h,m,s,frac
     NEW_DEFAULTS = [-4712,1,1,0,0,0,0]
@@ -50,6 +52,8 @@ module DateTimePrecision
     ]
     
     DATE_ATTRIBUTE_PRECISIONS = {
+      :century => CENTURY,
+      :decade => DECADE,
       :year => YEAR,
       :mon => MONTH,
       :day => DAY,
@@ -91,6 +95,10 @@ module DateTimePrecision
         MONTH
       when val[:year], val[:y]
         YEAR
+      when val[:decade]
+        DECADE
+      when val[:century]
+        CENTURY
       else
         NONE
       end
@@ -121,6 +129,17 @@ module DateTimePrecision
   def normalize_new_args(args)
     self.class.normalize_new_args(args)
   end
+
+  def decade
+    year_with_bce_adjustment = (self.year > 0) ? self.year : self.year + 10
+    (year_with_bce_adjustment - year_with_bce_adjustment % 10)
+  end
+
+  def century
+    year_with_bce_adjustment = (self.year > 0) ? self.year : self.year + 100
+    year_with_bce_adjustment - year_with_bce_adjustment % 100
+  end
+
   protected :normalize_new_args
   
   module ClassMethods
@@ -197,7 +216,7 @@ module DateTimePrecision
         protected :#{attribute_name}_set=
       EOM
     end
-    
+
     base.class_eval <<-EOM, __FILE__, __LINE__
       def attributes_set(*vals)
         #{DATE_ATTRIBUTES.map{|attribute| "@#{attribute}_set"}.join(', ')} = *(vals.flatten.map{|v| !!v})

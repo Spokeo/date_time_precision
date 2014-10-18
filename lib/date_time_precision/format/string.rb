@@ -9,6 +9,10 @@ Date::DATE_FORMATS[:long] = lambda do |date|
       date.strftime("%B %Y")
     when date.precision == DateTimePrecision::YEAR
       date.strftime("%Y")
+    when date.precision == DateTimePrecision::DECADE
+      "#{date.decade}s"
+    when date.precision == DateTimePrecision::CENTURY
+      "#{date.century}s"
     when date.month? && date.day?
       date.strftime("%B %e")
     when date.month?
@@ -30,6 +34,10 @@ Time::DATE_FORMATS[:long] = lambda do |time|
       time.strftime("%B %Y")
     when time.precision == DateTimePrecision::YEAR
       time.strftime("%Y")
+    when time.precision == DateTimePrecision::DECADE
+      "#{time.decade}s"
+    when time.precision == DateTimePrecision::CENTURY
+      "#{time.century}s"
     when time.month? && time.day?
       time.strftime("%B %e")
     when time.month?
