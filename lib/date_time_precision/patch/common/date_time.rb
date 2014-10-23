@@ -19,4 +19,17 @@ class DateTime < Date
       (sec_fraction.to_f*1_000_000).to_i
     end
   end
+
+  if method_defined?(:utc)
+    alias_method :utc_orig, :utc
+    def utc
+      dt = utc_orig
+      dt.precision = precision
+      dt
+    end
+  else
+    def utc
+      self.to_time.utc.to_datetime
+    end
+  end
 end

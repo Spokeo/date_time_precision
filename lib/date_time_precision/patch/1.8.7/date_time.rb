@@ -45,8 +45,4 @@ class DateTime < Date
       Time.local(*args).to_datetime
     end
   end
-
-  def utc
-    self.to_time.utc.to_datetime
-  end
 end

@@ -2,7 +2,7 @@ require 'date'
 require 'time'
 
 if defined?(ActiveSupport)
-  ['active_support/core_ext/date', 'active_support/core_ext/datetime', 'active_support/core_ext/time', 'active_support/time', 'active_support/time_with_zone'].each do |f|
+  ['active_support/core_ext/date', 'active_support/core_ext/datetime', 'active_support/core_ext/date_time', 'active_support/core_ext/time', 'active_support/time', 'active_support/time_with_zone'].each do |f|
     begin
       require f
     rescue LoadError; end

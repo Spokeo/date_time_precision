@@ -95,4 +95,14 @@ describe DateTimePrecision, 'Conversions' do
       expect(century_time.to_s(:long)).to eq("1800s")
     end
   end
+
+  context 'UTC' do
+    it 'does not crash and burn when calling #utc' do
+      expect { DateTime.now.utc }.to_not raise_error
+    end
+
+    it 'preserves precision when converting to UTC' do
+      expect(DateTime.new(2000, 5).utc.precision).to eq DateTimePrecision::MONTH
+    end
+  end
 end
