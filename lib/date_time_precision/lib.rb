@@ -15,7 +15,7 @@ class Date
       offset == 0
     end
   end
-  
+
   unless method_defined?(:utc_offset)
     def utc_offset
       offset.numerator*3600
@@ -37,10 +37,10 @@ module DateTimePrecision
     DECADE  = 0.5
     CENTURY = 0.25
     NONE    = 0
-  
+
     # Default values for y,m,d,h,m,s,frac
     NEW_DEFAULTS = [-4712,1,1,0,0,0,0]
-    
+
     DATE_ATTRIBUTES = [
       :year,
       :mon,
@@ -50,7 +50,7 @@ module DateTimePrecision
       :sec,
       :usec
     ]
-    
+
     DATE_ATTRIBUTE_PRECISIONS = {
       :century => CENTURY,
       :decade => DECADE,
@@ -108,7 +108,7 @@ module DateTimePrecision
       NONE
     end
   end
-  
+
   def fragments
     frags = []
     frags << year if year?
@@ -120,12 +120,12 @@ module DateTimePrecision
     frags << usec if usec?
     frags
   end
-  
+
   # Returns true if dates partially match (i.e. one is a partial date of the other)
   def partial_match?(date2)
     self.class::partial_match?(self, date2)
   end
-  
+
   def normalize_new_args(args)
     self.class.normalize_new_args(args)
   end
@@ -141,7 +141,7 @@ module DateTimePrecision
   end
 
   protected :normalize_new_args
-  
+
   module ClassMethods
     def partial_match?(date1, date2)
       return true if date1.nil? or date2.nil?
@@ -150,12 +150,12 @@ module DateTimePrecision
       min_precision = [frags1.length,frags2.length].min
       frags1.slice(0,min_precision) == frags2.slice(0,min_precision)
     end
-    
+
     def precision(val)
       val = val.take(self::MAX_PRECISION) if val.is_a? Array
       DateTimePrecision::precision(val)
     end
-    
+
     def normalize_new_args(args)
       unless args.all?
         # Replace nil values with their corresponding default values
@@ -175,8 +175,8 @@ module DateTimePrecision
       if base.method_defined?(conversion_method) && !base.instance_methods(false).map(&:to_sym).include?(orig)
         base.class_eval do
           alias_method orig, conversion_method
-          define_method(conversion_method) do
-            d = send(orig)
+          define_method(conversion_method) do |*args|
+            d = send(orig, *args)
             d.precision = [self.precision, d.class::MAX_PRECISION].min
             DATE_ATTRIBUTES.each do |attribute|
               d.instance_variable_set(:"@#{attribute}_set", self.instance_variable_get(:"@#{attribute}_set"))
@@ -196,15 +196,15 @@ module DateTimePrecision
 
       base.send :public, conversion_method
     end
-    
+
     # Extend with this module's class methods
     base.extend(ClassMethods)
-    
+
     # Define attribute query methods, including:
     # year?, mon?, day?, hour?, min?, sec?, usec?
     DATE_ATTRIBUTE_PRECISIONS.each do |attribute_name, precision|
       #next unless precision <= base::MAX_PRECISION
-      
+
       base.class_eval <<-EOM, __FILE__, __LINE__
         def #{attribute_name}?
           return !@#{attribute_name}_set.nil? ? @#{attribute_name}_set : (self.precision >= #{precision})
@@ -222,7 +222,7 @@ module DateTimePrecision
         #{DATE_ATTRIBUTES.map{|attribute| "@#{attribute}_set"}.join(', ')} = *(vals.flatten.map{|v| !!v})
       end
     EOM
-    
+
     base.instance_eval do
       alias_method :month?, :mon?
 
